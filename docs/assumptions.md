@@ -16,6 +16,8 @@ Last updated 2026-09-14 by the build-design interview. Platform measured: Claude
 | A06 | Upstream tags releases as `design--v<version>`. | distribution | The tag is missing; pin by sha instead. |
 | A07 | The turn that implements an approved plan passes the args block to the executor verbatim. | gate | The executor's schema validation rejects a block the plan file carried intact. |
 | A08 | The `fork` subagent type stays gated and parent-model only, so nothing here may depend on it. | execution | Irrelevant unless a design starts relying on it. |
+| A09 | A brief captured to a tracker issue is laid out as: body = one artifact, each further artifact = one comment, every artifact opening with its H1 and the three header lines. | discovery | A captured issue brief that build-design fails to recognize. |
+| A10 | `gh` or the GitHub connector is available wherever an issue is named as `source`. | discovery | The `issue-access-failed` precondition fires in a normal environment. |
 
 ## Measured facts
 
@@ -30,4 +32,5 @@ Last updated 2026-09-14 by the build-design interview. Platform measured: Claude
 | F07 | Subagents never see the parent conversation; the one exception, `fork`, is feature-gated and inherits the parent model. | CLI 2.1.270 |
 | F08 | Input price ratio across tiers is about 10 : 5 : 2 : 1 (fable : opus : sonnet : haiku). | claude-api reference, 2026-06 |
 | F09 | Upstream `the-exodus/claude-design-skills` carries no license file. | repo at sha 2e41d93 |
-| F10 | The `design` plugin's capture writes every artifact with three opening lines: Sourced from, Gaps, Inference; a brief goes to the tracker issue or a docs directory; ADRs, lexicon, and assumptions are written to fixed scan paths. | plugin 0.4.0 |
+| F10 | The `design` plugin's capture writes every artifact with three opening lines: Sourced from, Gaps, Inference; a brief goes to the tracker issue when the project works from one, else a docs directory; ADRs, lexicon, and assumptions are written to fixed scan paths. | plugin 0.4.0 |
+| F11 | GitHub caps an issue body or comment at 65536 characters. | GitHub |

@@ -14,6 +14,7 @@ decision, with a **Status**.
 | [0004](0004-select-models-per-unit-from-a-rule-table-with-an-escalation-ladder.md) | Select models per unit from a rule table with an escalation ladder | Accepted |
 | [0005](0005-distribute-the-design-plugin-as-a-pinned-remote-marketplace-entry.md) | Distribute the design plugin as a pinned remote marketplace entry and dependency | Accepted |
 | [0006](0006-build-sequentially-in-a-single-dedicated-worktree.md) | Build sequentially in a single dedicated worktree | Accepted |
+| [0007](0007-read-briefs-from-a-tracker-issue-as-well-as-from-disk.md) | Read briefs from a tracker issue as well as from disk | Accepted |
 
 ## Conventions
 
