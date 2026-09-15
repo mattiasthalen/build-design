@@ -34,3 +34,4 @@ Last updated 2026-09-14 by the build-design interview. Platform measured: Claude
 | F09 | Upstream `the-exodus/claude-design-skills` carries no license file. | repo at sha 2e41d93 |
 | F10 | The `design` plugin's capture writes every artifact with three opening lines: Sourced from, Gaps, Inference; a brief goes to the tracker issue when the project works from one, else a docs directory; ADRs, lexicon, and assumptions are written to fixed scan paths. | plugin 0.4.0 |
 | F11 | GitHub caps an issue body or comment at 65536 characters. | GitHub |
+| F12 | Git refuses a branch named under an existing branch (`build/x/failed-y` cannot exist while `build/x` does: refs are files). Side branches use a `--` separator, never a nested path. | measured 2026-09-15, first build run |
