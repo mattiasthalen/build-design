@@ -31,8 +31,11 @@ reads instead: the two call contracts, and nothing about how either runs.
 
 ## Where each line came from
 
-Most rows pair a line with its source rather than with an incident; the
-loop in step 4 is the first line a run earned. A line that a run breaks
+Most rows pair a line with its source rather than with an incident. Two
+groups are earned: the loop in step 4, from a run that batched the tests,
+and the six fixes a Fable review of the unrun skill found — the peer wait,
+the refused-decision channel, step 6's review target, the uncommitted ADRs,
+`unread` by position, and the green and commit gates. A line that a run breaks
 without gets its row rewritten to say what went wrong; a line no run ever
 needed gets cut.
 
@@ -58,6 +61,10 @@ needed gets cut.
 | `Put every candidate to the peers the moment step 4 returns` | in practice the original prompt's peer channel stayed open all run, and ADRs were where it earned most: the peer holds the tree, so it knows the decision the design already settled and the one it explicitly rejected. Step 2 asks once and closes the channel, which loses exactly that. The send is at step 4's return rather than inside step 5 because the ADRs must be in the diff the reviewers read, so the wait has to start before the writing does |
 | `ListAgents first: a peer that answered in step 2 and is no longer listed` | the roster is established in step 2 and spent in step 5, an hour and a build apart, and a session can end in between. Without the re-check the send goes to an address nothing answers to and the wait never resolves — a silence identical to a peer with nothing to add. Named rather than waited on, since a dead peer's answer is not coming |
 | `A new ADR goes in on the answers you have by then; a supersession waits for its peer` | the error is one-sided. A new ADR written without the peer is a duplicate in the index, and superseding is the mechanism that corrects it. A supersession written without the peer edits an ADR someone else wrote, on a guess. So the block is on the expensive half only — blocking both would stall the run on a reply that arrives when that session next takes a turn, which may be after this one ends |
+| `A peer that has not answered ... goes into them as an outstanding wait` | a reply lands when the peer session next takes a turn, and nothing in this session makes that happen. Without the clause the run holds at step 2 for something no one is going to do, and the questions I could have answered an hour ago never arrive. The wait travels inside the questions instead |
+| `A design decision the code refuses is a fork the loop reports` | the line used to say the refusal "comes back to me first", written when the session did the building. A green agent cannot reach me — it would take the fork and say nothing — so the report is what the loop can actually do, and the arrival is the workflow's return |
+| `the change is the diff since this branch left its base and never the working tree` | every loop commits, so by step 6 the working tree holds the ADRs and nothing else. `/code-review` with no target reads that tree: the cycle would have ended on its first pass having reviewed no code at all, and "a pass that finds nothing ends it" would have made that look like success |
+| `The ADRs and these fixes are commits of their own` | step 4's loops commit and nothing after them did. The report claimed a history that did not hold the ADRs the report was naming |
 | `A candidate still waiting when the cycle ends is one you name to me` | the wait is invisible otherwise: a peer that never answered and a peer that answered "nothing to add" leave the same trace, which is no ADR. Naming it puts the decision back to me while I still have the diff in front of me |
 | `its acceptance criteria where the ticket has none` | `design-interview`'s claim that criteria written from the design alone prove the design is done. A ticket that did not come from it has none, and then the reading carries them, for me to confirm in step 3 |
 | `What the code cannot tell you ... is one of those decisions` | `design-interview`'s Phase 2: exploration reads what is there and is blind to what isn't, and the absences are decisions. At build time the same absence gets enforced silently or stepped around; naming it a decision puts it in the questions |
@@ -142,6 +149,9 @@ Its default tiers, which a behavior or `args.models` overrides:
 | Red on opus, Green on sonnet | the test is where the behavior gets its contract: its name, its boundary, its assertion. Wrong there and green is wrong quietly, which is the one failure the loop cannot catch. Green is the change that test already specified, and the test is the check on it |
 | Fix on opus | a finding that survived its lens is where judgement is owed, and it is the only stage that edits code a reviewer already read |
 | Commit on haiku | a message, from a diff |
+| `unread` from position, not from the returned `source` | a Fable review predicted it and the probe run had already done it: an agent told to read "the skill at skills/implement-design/SKILL.md" returns `source: '/home/user/build-design/skills/implement-design/SKILL.md'`. The name in `args` is what I called the thing; the string in the slice is what the agent called it, and they match by luck. `parallel` preserves input order, so position is the identity and the echoed name is only a label. Missed on the first read of that run, which reported two read sources as unread and had the synthesis invent a list |
+| the green and commit gates | the same review: `green` returned only its decisions and `commit` returned nothing, so a suite that never went green went on to be reviewed and committed red, and a commit a hook refused left its slice loose in the tree for the next loop to swallow. Both stages report now, and both stop the run — "one loop, one commit" is checked rather than asserted |
+| `git add -A` in green, `git diff --cached` in the lenses | the lenses read "the uncommitted diff", and `git diff` does not show an untracked file. The new test is untracked by construction, so the three reviewers saw the change and not the contract it was written against — the correctness lens reading a diff with its test missing |
 | stopping when the test never goes red | a test that passes on its first run says the behavior already exists or the test misses it, and either way the rest of the loops are built on a check that proves nothing. The reference's no-silent-caps rule makes the stop a `log` line naming how many behaviors went unbuilt |
 | `A finding you judge wrong stays unfixed and comes back with the reason` | the same rule step 4 has for a design decision the code refuses, at the scale of one loop: the fix stage is the reviewer's peer, not its clerk |
 
