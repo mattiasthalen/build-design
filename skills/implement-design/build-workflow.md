@@ -17,6 +17,9 @@ and a worktree would strand the commits off it.
 ## Model allocation
 
 Inherit nothing by default here: each stage asks for something different.
+The table is the default. A behavior arrives with `models` of its own when
+the session can see this one is subtler or flatter than the rest, and
+`args.models` moves a whole stage for a run.
 
 | stage | model | effort | why |
 | --- | --- | --- | --- |
@@ -68,6 +71,21 @@ const FINDINGS = {
   required: ['findings'],
 }
 
+const DEFAULT = {
+  red: { model: 'opus', effort: 'high' },
+  green: { model: 'sonnet', effort: 'medium' },
+  review: { model: 'sonnet', effort: 'high' },
+  fix: { model: 'opus', effort: 'high' },
+  commit: { model: 'haiku', effort: 'low' },
+}
+
+// the script's default, the run's override, then the behavior's own
+const tier = (stage, behavior) => ({
+  ...DEFAULT[stage],
+  ...((args.models ?? {})[stage] ?? {}),
+  ...((behavior?.models ?? {})[stage] ?? {}),
+})
+
 const LENSES = [
   'correctness: what input makes this wrong',
   'design: depth behind a small interface, information hiding, pass-through layers, per software-design:design-philosophy',
@@ -84,7 +102,7 @@ for (const [i, behavior] of args.behaviors.entries()) {
     `Write one failing test for this behavior, and nothing else:\n\n${behavior.criterion}\n\n${behavior.notes ?? ''}\n\n` +
     `Follow the suite's own conventions. Run it. Return its path, whether it failed for the reason the behavior predicts, ` +
     `and the failure as reported. Write no production code.`,
-    { label: `red ${at}`, phase: 'Red', model: 'opus', effort: 'high', schema: RED })
+    { label: `red ${at}`, phase: 'Red', ...tier('red', behavior), schema: RED })
 
   if (!red?.red) {
     log(`${at} stopped: the test never went red (${red?.failure ?? 'no result'}). ${args.behaviors.length - i} behaviors unbuilt.`)
@@ -95,13 +113,13 @@ for (const [i, behavior] of args.behaviors.entries()) {
   await agent(
     `Make ${red.testPath} pass. The failure to clear: ${red.failure}\n\n` +
     `Smallest change that earns it. Leave the test alone. Run the whole suite and report it green.`,
-    { label: `green ${at}`, phase: 'Green', model: 'sonnet', effort: 'medium' })
+    { label: `green ${at}`, phase: 'Green', ...tier('green', behavior) })
 
   phase('Review')
   const findings = (await parallel(LENSES.map((lens) => () =>
     agent(
       `Review the uncommitted diff through one lens — ${lens}. Report only what this lens sees, in the diff itself.`,
-      { label: `review ${at}: ${lens.split(':')[0]}`, phase: 'Review', model: 'sonnet', effort: 'high', schema: FINDINGS })
+      { label: `review ${at}: ${lens.split(':')[0]}`, phase: 'Review', ...tier('review', behavior), schema: FINDINGS })
   ))).filter(Boolean).flatMap((r) => r.findings)
 
   if (findings.length) {
@@ -110,13 +128,13 @@ for (const [i, behavior] of args.behaviors.entries()) {
       `Fix these findings in the working tree, keeping every test green:\n` +
       findings.map((f) => `- ${f.file}${f.line ? `:${f.line}` : ''} — ${f.finding}`).join('\n') +
       `\n\nA finding you judge wrong stays unfixed and comes back with the reason.`,
-      { label: `fix ${at}`, phase: 'Review', model: 'opus', effort: 'high' })
+      { label: `fix ${at}`, phase: 'Review', ...tier('fix', behavior) })
   }
 
   phase('Commit')
   await agent(
     `Commit the working tree. The message names the behavior — ${behavior.criterion} — and says why it is built this way.`,
-    { label: `commit ${at}`, phase: 'Commit', model: 'haiku', effort: 'low' })
+    { label: `commit ${at}`, phase: 'Commit', ...tier('commit', behavior) })
 
   built.push({ behavior: behavior.criterion, test: red.testPath, findings: findings.length })
 }

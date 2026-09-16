@@ -23,6 +23,11 @@ be a gap of three different kinds.
 
 ## Model allocation
 
+The table is the default. A source arrives with its own `model` and
+`effort` when the session that read the ticket can see this one is harder
+or flatter than its kind — an ADR that settled the whole feature, a lexicon
+of six lines — and `args.models` moves a whole stage for a run.
+
 | stage | model | effort | why |
 | --- | --- | --- | --- |
 | Read a record | sonnet | medium | extraction from a document that already says it, against a ticket the prompt carries |
@@ -84,6 +89,22 @@ const GAPS = {
   required: ['gaps'],
 }
 
+const DEFAULT = {
+  record: { model: 'sonnet', effort: 'medium' },
+  code: { model: 'sonnet', effort: 'high' },
+  synthesize: { model: 'opus', effort: 'high' },
+  critique: { model: 'sonnet', effort: 'high' },
+  revise: { model: 'opus', effort: 'high' },
+}
+
+// the script's default, the run's override, then the source's own
+const tier = (stage, source) => ({
+  ...DEFAULT[stage],
+  ...((args.models ?? {})[stage] ?? {}),
+  ...(source?.model ? { model: source.model } : {}),
+  ...(source?.effort ? { effort: source.effort } : {}),
+})
+
 const LENSES = [
   'coverage: a source nobody read, a claim in the reading with no source behind it',
   'absence: an invariant enforced nowhere, a concept with two shapes and no authority, a name that says how instead of what',
@@ -99,7 +120,7 @@ const slices = (await parallel(args.sources.map((s) => () =>
         `a concept with two shapes and no authority. An absence is a finding here, not a gap in your reading.`
       : `Report what it says that bears on this ticket, every decision it records with what that decision rejected, ` +
         `and what it leaves open.`),
-    { label: `read ${s.name}`, phase: 'Read', model: 'sonnet', effort: s.kind === 'code' ? 'high' : 'medium', schema: SLICE })
+    { label: `read ${s.name}`, phase: 'Read', ...tier(s.kind, s), schema: SLICE })
 ))).filter(Boolean)
 
 const unread = args.sources.filter((s) => !slices.some((r) => r.source === s.name)).map((s) => s.name)
@@ -113,14 +134,14 @@ let reading = await agent(
   `yourself where the ticket has none — and every decision the ticket leaves to whoever builds it. ` +
   `Two sources that disagree are a decision, not a merge.` +
   (unread.length ? `\n\nUnread, and yours to report: ${unread.join(', ')}.` : ''),
-  { label: 'the reading', phase: 'Synthesize', model: 'opus', effort: 'high', schema: READING })
+  { label: 'the reading', phase: 'Synthesize', ...tier('synthesize'), schema: READING })
 
 phase('Critique')
 const gaps = (await parallel(LENSES.map((lens) => () =>
   agent(
     `The sources:\n\n${slate}\n\nThe reading drawn from them:\n\n${JSON.stringify(reading)}\n\n` +
     `Critique it through one lens — ${lens}. Report only what this lens sees.`,
-    { label: `critique: ${lens.split(':')[0]}`, phase: 'Critique', model: 'sonnet', effort: 'high', schema: GAPS })
+    { label: `critique: ${lens.split(':')[0]}`, phase: 'Critique', ...tier('critique'), schema: GAPS })
 ))).filter(Boolean).flatMap((c) => c.gaps)
 
 if (gaps.length) {
@@ -129,7 +150,7 @@ if (gaps.length) {
     `The reading:\n\n${JSON.stringify(reading)}\n\nThe sources:\n\n${slate}\n\n` +
     `Three lenses found these gaps:\n${gaps.map((g) => `- ${g}`).join('\n')}\n\n` +
     `Return the reading with each one closed. A gap you judge wrong stays open and its entry says why.`,
-    { label: 'the reading, revised', phase: 'Revise', model: 'opus', effort: 'high', schema: READING })
+    { label: 'the reading, revised', phase: 'Revise', ...tier('revise'), schema: READING })
 }
 
 return reading

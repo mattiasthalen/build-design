@@ -10,6 +10,13 @@ Let's build $0.
 Steps 1 and 4 run as workflows, scripted in the files beside this one.
 This skill is your authorization to call the `Workflow` tool.
 
+You plan, allocate and ask; the workflows read, build and review. Keep
+what a workflow returns — the reading, the rows — and leave how it got
+there in the run: a source's text, a slice's diff, a review's body. Each
+script's model table is the default, and a source or a behavior you can
+see is subtler or flatter than its kind travels in `args` with the tier
+you give it.
+
 ## The run
 1. **Ground yourself in the ticket and the code.** Read the ticket
    yourself, body and comments: what it links — the brief, the ADRs,
@@ -48,4 +55,5 @@ This skill is your authorization to call the `Workflow` tool.
    `/security-review` over the full diff, their findings fixed, and both
    run again; a pass that finds nothing ends it. Then tell me: each
    criterion and the test that met it, the ADRs written, what the
-   reviews found.
+   reviews found, and every tier you moved off its default, with what
+   in the source or the behavior moved it.
