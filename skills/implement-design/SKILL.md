@@ -53,7 +53,10 @@ I approve it. Step 4 starts on that approval.
    commit. Run the loops with the `build-behaviors` workflow, the plan's
    behaviors and their tiers as its `args`; it returns the test that met
    each criterion, what its review fixed, and the forks its loops took.
-   Done is every acceptance criterion met by a test in the history.
+   Done is every acceptance criterion met by a test in the history. A run
+   that stops is a finding about the plan, not a hiccup: tell me what was
+   built, what stopped it, and what is left, and let me decide. Nothing
+   resumes on its own.
    Structure the ticket leaves open follows
    `software-design:design-philosophy`, or `design:design-philosophy`
    where that plugin was installed under its own name. A design decision
