@@ -5,7 +5,7 @@ argument-hint: "<ticket>"
 disable-model-invocation: true
 ---
 
-Let's build $0.
+Let's build $ARGUMENTS.
 
 Steps 1 and 4 run as workflows this plugin ships, called by name and
 never read: `workflows.md` beside this file is their contract. This skill

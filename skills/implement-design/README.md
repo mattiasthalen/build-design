@@ -42,7 +42,7 @@ needed gets cut.
 | line | where it came from |
 | --- | --- |
 | `implement-design`, the name | asked for, with the rule that came with it: call it what it is. The skill implements a design, one ticket of it; `implement` alone said what every build session does |
-| `Let's build $0` and the six steps | the prompt above, typed by hand at the start of every build session. Asked for, not measured |
+| `Let's build $ARGUMENTS` and the six steps | the prompt above, typed by hand at the start of every build session. Asked for, not measured. `$0` at first, until a Fable review asked what it does to a multi-word ticket: the harness splits the argument into positionals, `$0` takes the first token, and `PROJ-12 checkout flow` arrives as `PROJ-12`. `$ARGUMENTS` is the whole string, which is what the ticket now is |
 | `body, comments, and what it links: the brief, the ADRs, the lexicon, the assumptions record` | what `design-interview` leaves behind. The brief lives on the ticket or in the docs directory and is spent when the feature ships; the ADRs, the lexicon and the assumptions record outlive it and are the project's. A fresh session reads the issue body by default and stops there |
 | `Read the ticket yourself ... and the code they name are the sources` | the reference's hybrid rule: scout inline, then orchestrate. The source list is what the ticket links, so it cannot be an argument to the read — it is the read's first finding. The ticket is also the one source every later prompt carries |
 | `Read those with the the-reading workflow, the sources as its args` | suggested, of the peer step, and true one step earlier. Six artifacts read in sequence land in a context the last of them is crowding, and the ADR read at position six gets the attention position six has left. One agent per source reads all of them at full weight, and the synthesis sees six slices instead of one fading memory. The peers are why it is step 1 and not step 2: a peer is a live session holding the interview, and a subagent spawned to stand in for one holds nothing the main session could not read itself |
@@ -177,8 +177,9 @@ since, both with the peers-as-argument:
 
 - `$ARGUMENTS` substituted into the middle of a sentence reads oddly once
   expanded, "Every `@name` in `#12 @design` is a session". It stood because
-  the alternative lost the peers; retired with the argument itself, and `$0`
-  is the only placeholder left.
+  the alternative lost the peers, and went with the peers-as-argument. The
+  placeholder came back on its own in `Let's build`, where it is the whole
+  ticket and reads as one.
 - The `design-philosophy` pointer, on a skill whose description would
   trigger on its own: the table's row. One line against a coin flip.
 - "Say who you asked", which describes what the model would report anyway
