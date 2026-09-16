@@ -1,0 +1,47 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "build-design",
+  "description": "Build what a design interview decided, and the design plugin it builds from.",
+  "owner": {
+    "name": "Mattias Thalén",
+    "url": "https://github.com/mattiasthalen"
+  },
+  "plugins": [
+    {
+      "name": "build-design",
+      "source": "./",
+      "description": "Build what a design interview decided. One skill for now: implement-design, one ticket of the design in a fresh session. Depends on the design plugin.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Mattias Thalén",
+        "url": "https://github.com/mattiasthalen"
+      },
+      "homepage": "https://github.com/mattiasthalen/build-design",
+      "repository": "https://github.com/mattiasthalen/build-design",
+      "keywords": [
+        "skills",
+        "design",
+        "implement",
+        "adr",
+        "tickets"
+      ],
+      "category": "workflow"
+    },
+    {
+      "name": "design",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/the-exodus/claude-design-skills.git",
+        "path": "plugins/design",
+        "sha": "2e41d9356814f9a1fa18d6bbedc971bab51cc331"
+      },
+      "description": "Interview-driven software design: takes a rough pitch to a complete, gap-free design tree, then captures it as specs, contracts, and ADRs. Carries a lexicon and an assumptions record across a project's lifetime; everything else it writes is the feature's brief.",
+      "version": "0.4.0",
+      "author": {
+        "name": "Tobias Karlsson"
+      },
+      "repository": "https://github.com/the-exodus/claude-design-skills",
+      "category": "development"
+    }
+  ]
+}
