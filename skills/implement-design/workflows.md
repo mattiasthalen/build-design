@@ -23,7 +23,10 @@ what it does and for what it leaves unsaid. `model` and `effort` on a source
 override its kind's tier; `models` keys are `record`, `code`, `synthesize`,
 `critique`, `revise`.
 
-Returns `{building, criteria: [{criterion, check}], decisions, unread}`.
+Returns `{building, criteria: [{criterion, check, source}], decisions, unread}`.
+The criteria come from the brief, which always carries them; `source` names
+the brief that did, or reads `unsourced` for one the reading wrote itself —
+which is a gap to raise, not a criterion to build.
 `unread` is a source no agent came back for; it is yours to tell me about.
 
 ## `build-behaviors` — step 4

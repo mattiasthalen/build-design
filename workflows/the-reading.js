@@ -33,8 +33,9 @@ const READING = {
         properties: {
           criterion: { type: 'string' },
           check: { type: 'string', description: 'the check that could fail if it were unmet' },
+          source: { type: 'string', description: "the brief that carries it, or 'unsourced' for one the reading wrote" },
         },
-        required: ['criterion', 'check'],
+        required: ['criterion', 'check', 'source'],
       },
     },
     decisions: { type: 'array', items: { type: 'string' }, description: 'every decision the ticket leaves to you' },
@@ -68,7 +69,7 @@ const tier = (stage, source) => ({
 const LENSES = [
   'coverage: a source nobody read, a claim in the reading with no source behind it',
   'absence: an invariant enforced nowhere, a concept with two shapes and no authority, a name that says how instead of what',
-  'criteria: a criterion whose check could not fail, or a criterion the ticket implies and the reading dropped',
+  'criteria: a criterion whose check could not fail, one the brief carries and the reading dropped, or one the reading wrote that the brief does not have',
 ]
 
 phase('Read')
@@ -93,8 +94,9 @@ phase('Synthesize')
 const slate = JSON.stringify(slices)
 let reading = await agent(
   `These are the sources of this ticket, read one at a time:\n\n${slate}\n\nThe ticket:\n\n${args.ticket}\n\n` +
-  `Write the reading: what you will build, its acceptance criteria and the check that proves each — write the criteria ` +
-  `yourself where the ticket has none — and every decision the ticket leaves to whoever builds it. ` +
+  `Write the reading: what you will build, its acceptance criteria and the check that proves each, and every decision ` +
+  `the ticket leaves to whoever builds it. The criteria are the brief's — it always carries them — so a criterion ` +
+  `you write yourself belongs in the reading as a gap, named as one, and not as a criterion. ` +
   `Two sources that disagree are a decision, not a merge.` +
   (unread.length ? `\n\nUnread, and yours to report: ${unread.join(', ')}.` : ''),
   { label: 'the reading', phase: 'Synthesize', ...tier('synthesize'), schema: READING })

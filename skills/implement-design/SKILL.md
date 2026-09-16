@@ -28,11 +28,13 @@ I approve it. Step 4 starts on that approval.
    yourself, body and comments: what it links — the brief, the ADRs,
    the lexicon, the assumptions record — and the code they name are
    the sources. Read those with the `the-reading` workflow, the sources
-   as its `args`. It returns your reading: what you will build, its
-   acceptance criteria where the ticket has none, and every decision
-   the ticket leaves to you. What the code cannot tell you — an
-   invariant enforced nowhere, a concept with two shapes and no
-   authority — is one of those decisions.
+   as its `args`. It returns your reading: what you will build, the
+   brief's acceptance criteria, and every decision the ticket leaves to
+   you. The brief always carries those criteria, so one you wrote
+   yourself is a sign you have not found the brief — say so rather than
+   invent. What the code cannot tell you — an invariant enforced
+   nowhere, a concept with two shapes and no authority — is one of those
+   decisions.
 2. **Ask me who the peers are.** `ListAgents` prints the live sessions.
    Show me that list, name the ones that look like this ticket's design
    and say what makes each look that way, and ask which to ask. Send
@@ -77,8 +79,10 @@ I approve it. Step 4 starts on that approval.
 6. **Review the whole.** The loop reviews saw slices; this one sees what
    they add up to. The loops committed, so the change is the diff since
    this branch left its base and never the working tree: name that base
-   to `/code-review` and `/security-review`, fix what they find, and run
-   both again; a pass that finds nothing ends it. The ADRs and these
+   to `/code-review` and `/security-review`, and read the change against
+   the brief — every acceptance criterion met by a test, and nothing in
+   the diff the brief did not ask for. Fix what all three find and run
+   them again; a pass that finds nothing ends it. The ADRs and these
    fixes are commits of their own. Then tell me: each criterion and the
    test that met it, the ADRs written, what the reviews found, and every
    tier the plan moved off its default, with what in the source or the
