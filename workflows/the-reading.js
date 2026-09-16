@@ -1,47 +1,7 @@
-# The reading workflow
-
-Step 1 of `implement-design` ends in the reading, and the sources it comes
-from are read in parallel. One session reading six artifacts in a row holds
-the first one in a context the sixth has crowded; one agent per source holds
-all of it, and the synthesis sees six slices at full weight.
-
-## Shape
-
-**Scout inline first.** Read the ticket yourself — body and comments — since
-what it links is what the workflow reads, and you cannot pass a source list
-you have not discovered. Each link, and each code region those links name,
-is one entry in `args.sources`.
-
-Sources are `record` or `code`, and the kinds ask for different work. A
-record says what it says: the read is extraction. Code has to be inferred
-from, and what it leaves unsaid — an invariant enforced nowhere, a concept
-with two shapes and no authority — is the part step 1 turns into a decision.
-
-The synthesis is a **barrier**: the reading is one document and needs every
-slice at once. The critique fans out again, because a gap in the reading can
-be a gap of three different kinds.
-
-## Model allocation
-
-The table is the default. A source arrives with its own `model` and
-`effort` when the session that read the ticket can see this one is harder
-or flatter than its kind — an ADR that settled the whole feature, a lexicon
-of six lines — and `args.models` moves a whole stage for a run.
-
-| stage | model | effort | why |
-| --- | --- | --- | --- |
-| Read a record | sonnet | medium | extraction from a document that already says it, against a ticket the prompt carries |
-| Read code | sonnet | high | the same read plus the absences, which are inference and are the ones the reading exists to surface |
-| Synthesize | opus | high | the one stage that sees everything, and the stage whose output every later step is built on — the criteria here become the build workflow's behaviors |
-| Critique | sonnet ×3 | high | three narrow reads of one document; each lens is blind to the others' failure and none needs the whole design in mind |
-| Revise | opus | high | a gap that survived its lens is a judgement about the design, taken against the full reading |
-
-## The script
-
-```js
 export const meta = {
   name: 'the-reading',
   description: "Read a ticket's sources in parallel and synthesize the reading",
+  whenToUse: 'Step 1 of implement-design, once the ticket has been read and its sources listed',
   phases: [
     { title: 'Read', detail: 'one agent per source', model: 'sonnet' },
     { title: 'Synthesize', detail: 'the slices into one reading', model: 'opus' },
@@ -154,7 +114,3 @@ if (gaps.length) {
 }
 
 return reading
-```
-
-The reading is what step 2 sends the peers and what step 3 puts to me. Its
-`criteria` are the build workflow's `behaviors` once I have answered.

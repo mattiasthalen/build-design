@@ -7,22 +7,23 @@ disable-model-invocation: true
 
 Let's build $0.
 
-Steps 1 and 4 run as workflows, scripted in the files beside this one.
-This skill is your authorization to call the `Workflow` tool.
+Steps 1 and 4 run as workflows this plugin ships, called by name and
+never read: `workflows.md` beside this file is their contract. This skill
+is your authorization to call the `Workflow` tool.
 
 You plan, allocate and ask; the workflows read, build and review. Keep
 what a workflow returns — the reading, the rows — and leave how it got
 there in the run: a source's text, a slice's diff, a review's body. Each
-script's model table is the default, and a source or a behavior you can
-see is subtler or flatter than its kind travels in `args` with the tier
-you give it.
+workflow's default tiers are in `workflows.md`, and a source or a
+behavior you can see is subtler or flatter than its kind travels in
+`args` with the tier you give it.
 
 ## The run
 1. **Ground yourself in the ticket and the code.** Read the ticket
    yourself, body and comments: what it links — the brief, the ADRs,
    the lexicon, the assumptions record — and the code they name are
-   the sources. Read those with `reading-workflow.md`, the sources as
-   its `args`. It returns your reading: what you will build, its
+   the sources. Read those with the `the-reading` workflow, the sources
+   as its `args`. It returns your reading: what you will build, its
    acceptance criteria where the ticket has none, and every decision
    the ticket leaves to you. What the code cannot tell you — an
    invariant enforced nowhere, a concept with two shapes and no
@@ -41,9 +42,9 @@ you give it.
 4. **Build one behavior at a time.** Each is a loop: the test first, red
    for the reason you expect; the code that turns it green; review over
    that slice, its findings fixed; the commit. One loop, one commit.
-   Run the loops with `build-workflow.md`, the reading's criteria as
-   its `args`. Done is every acceptance criterion met by a test in the
-   history. Structure the ticket leaves open follows
+   Run the loops with the `build-behaviors` workflow, the reading's
+   criteria as its `args`. Done is every acceptance criterion met by a
+   test in the history. Structure the ticket leaves open follows
    `software-design:design-philosophy`. A design decision the code
    refuses comes back to me first.
 5. **Record the decisions.** A decision made while building, mine

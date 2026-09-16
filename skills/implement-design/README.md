@@ -23,8 +23,10 @@ step 1, corrected by the peers in step 2, and put to me in step 3 as the
 questions. What survives that is what gets built — its criteria become the
 behaviors step 4 builds one loop at a time.
 
-Steps 1 and 4 are workflows, scripted in `reading-workflow.md` and
-`build-workflow.md` beside the skill, each with its own rows below.
+Steps 1 and 4 are workflows the plugin ships — `the-reading` and
+`build-behaviors`, scripts under `workflows/` at the repository root — and
+the skill calls them by name. `workflows.md` beside the skill is what it
+reads instead: the two call contracts, and nothing about how either runs.
 
 ## Where each line came from
 
@@ -39,10 +41,11 @@ needed gets cut.
 | `Let's build $0` and the six steps | the prompt above, typed by hand at the start of every build session. Asked for, not measured |
 | `body, comments, and what it links: the brief, the ADRs, the lexicon, the assumptions record` | what `design-interview` leaves behind. The brief lives on the ticket or in the docs directory and is spent when the feature ships; the ADRs, the lexicon and the assumptions record outlive it and are the project's. A fresh session reads the issue body by default and stops there |
 | `Read the ticket yourself ... and the code they name are the sources` | the reference's hybrid rule: scout inline, then orchestrate. The source list is what the ticket links, so it cannot be an argument to the read — it is the read's first finding. The ticket is also the one source every later prompt carries |
-| `Read those with reading-workflow.md, the sources as its args` | suggested, of the peer step, and true one step earlier. Six artifacts read in sequence land in a context the last of them is crowding, and the ADR read at position six gets the attention position six has left. One agent per source reads all of them at full weight, and the synthesis sees six slices instead of one fading memory. The peers are why it is step 1 and not step 2: a peer is a live session holding the interview, and a subagent spawned to stand in for one holds nothing the main session could not read itself |
+| `Read those with the the-reading workflow, the sources as its args` | suggested, of the peer step, and true one step earlier. Six artifacts read in sequence land in a context the last of them is crowding, and the ADR read at position six gets the attention position six has left. One agent per source reads all of them at full weight, and the synthesis sees six slices instead of one fading memory. The peers are why it is step 1 and not step 2: a peer is a live session holding the interview, and a subagent spawned to stand in for one holds nothing the main session could not read itself |
 | `You plan, allocate and ask; the workflows read, build and review` | the session that runs this skill is not necessarily the one that should do the reading. Fable can drive it, and the reason to is that it never has to be the model doing the subtle work: it plans the run, picks the tier each piece deserves, and holds the conversation with me. Naming the division once at the top is what keeps the model from reading a source itself because it is right there |
 | `Keep what a workflow returns ... leave how it got there in the run` | the main session's context is the scarce one — it survives every step, and everything it reads it carries to the end. A workflow's agents each get their own, so the source text, the diffs and the review bodies cost nothing there and cost the rest of the run if they land here. The `Workflow` reference says the same thing from the other side: an agent's final text is the return value, not a report |
-| `Each script's model table is the default ... travels in args with the tier you give it` | asked for: the plan picks the models, and a table frozen in a script cannot know that this ticket's ADR settled the whole feature while its lexicon is six lines. Three layers, narrowest wins — the script's default, `args.models` for a run, the source's or behavior's own — so the common case stays silent and the exception is one field |
+| `Each workflow's default tiers are in workflows.md ... travels in args with the tier you give it` | asked for: the plan picks the models, and a table frozen in a script cannot know that this ticket's ADR settled the whole feature while its lexicon is six lines. Three layers, narrowest wins — the script's default, `args.models` for a run, the source's or behavior's own — so the common case stays silent and the exception is one field |
+| `workflows this plugin ships, called by name and never read` | asked for. A script the session reads to run it costs that session the whole script; a workflow the plugin ships is invoked by its `meta.name` and costs the call. `workflows.md` is what remains in the skill: the args each one takes and what it returns, which the caller genuinely needs, and nothing about how either runs. Plugins auto-load `workflows/` at their root, so shipping them is a directory |
 | `every tier you moved off its default, with what ... moved it` | the tiers are guesses until a run has an opinion. Reporting only the moves keeps the report short and puts the evidence where the next edit to the table needs it |
 | `Steps 1 and 4 run as workflows ... your authorization` | the `Workflow` tool refuses to run without explicit opt-in, and names a skill's instructions as one of the forms that opt-in takes. Without the line the model reaches step 1, reads the tool's own rule, and builds inline instead. Written once above the run rather than in both steps, since it is one permission and not two |
 | `its acceptance criteria where the ticket has none` | `design-interview`'s claim that criteria written from the design alone prove the design is done. A ticket that did not come from it has none, and then the reading carries them, for me to confirm in step 3 |
@@ -60,7 +63,7 @@ needed gets cut.
 | `red` / `green` | `writing-for-agents`' leading-word lever, and its own worked example: "a loop you believe in" → _red_, a fuzzy gate turned into a binary state the model can observe. Two pretrained words carry the whole TDD cycle that "watched failing for the reason you expect, then the code that passes it" spent a line on |
 | `for the reason you expect` | red alone is not evidence: an import error, a missing fixture, an assertion that never ran are all red. The reason is what distinguishes a test that describes the behavior from one that describes a typo |
 | `review over that slice, its findings fixed` | asked for: the review cycle ran once, at the end, over the whole diff, so a habit set in loop one was found in loop nine and cost every loop after it. A slice review is cheap, its findings are local, and it keeps the final cycle for what only the whole shows |
-| `Run the loops with build-workflow.md` | asked for. The loop is control flow — fixed order, fixed count, one commit each — and the `Workflow` tool is where control flow stops being a judgement the model remakes every round. It also buys the per-stage model allocation that a single session cannot have. The script is named by path, not by a skill pointer: a file in the skill's own folder is reached by reading it. Both scripts sit outside `SKILL.md` because each is forty lines that one step reads, and inlining either would bury the other five steps |
+| `Run the loops with the build-behaviors workflow` | asked for. The loop is control flow — fixed order, fixed count, one commit each — and the `Workflow` tool is where control flow stops being a judgement the model remakes every round. It also buys the per-stage model allocation that a single session cannot have. The script is named by path, not by a skill pointer: a file in the skill's own folder is reached by reading it. Both scripts sit outside `SKILL.md` because each is forty lines that one step reads, and inlining either would bury the other five steps |
 | `the reading's criteria as its args` | the two workflows are one pipe: step 1's `criteria` are step 4's `behaviors`, each with the check that proves it. `args` is how a workflow takes input; without the phrase the model writes the behaviors into the script text, and the script stops being the same script twice |
 | `The loop reviews saw slices; this one sees what they add up to` | the final cycle's reason for surviving the per-loop reviews — without it the model reads step 6 as the work step 4 already did. Duplication across slices, a seam neither side owns, an ADR written in step 5 and reviewed by nobody: none of it is visible inside one loop |
 | `Structure the ticket leaves open follows software-design:design-philosophy` | the `design-philosophy` skill says of itself that it applies when an agent implements from a spec with structural decisions still open, and its description would trigger on that. A must-have target behind a far pointer is a variance bug, so the skill names it in one line rather than trusting the description to fire |
@@ -73,7 +76,22 @@ needed gets cut.
 
 ## The reading workflow
 
-`reading-workflow.md` is step 1's script.
+`workflows/the-reading.js` at the plugin root is step 1's script. Its
+sources are read in parallel because one session reading six artifacts in a
+row holds the first in a context the sixth has crowded; one agent per source
+holds all of it, and the synthesis sees six slices at full weight. The
+session still reads the ticket itself — what it links is what the workflow
+reads, so the source list cannot be an argument to it.
+
+Its default tiers, which a source or `args.models` overrides:
+
+| stage | model | effort | why |
+| --- | --- | --- | --- |
+| Read a record | sonnet | medium | extraction from a document that already says it, against a ticket the prompt carries |
+| Read code | sonnet | high | the same read plus the absences, which are inference and are the ones the reading exists to surface |
+| Synthesize | opus | high | the one stage that sees everything, and the stage whose output every later step is built on — the criteria here become the build workflow's behaviors |
+| Critique | sonnet ×3 | high | three narrow reads of one document; each lens is blind to the others' failure and none needs the whole design in mind |
+| Revise | opus | high | a gap that survived its lens is a judgement about the design, taken against the full reading |
 
 | line | where it came from |
 | --- | --- |
@@ -90,7 +108,19 @@ needed gets cut.
 
 ## The build workflow
 
-`build-workflow.md` is step 4's script, and its own set of decisions:
+`workflows/build-behaviors.js` at the plugin root is step 4's script. The
+loop is control flow — red, green, reviewed, committed, once per behavior —
+so the script holds it and the model stops re-deciding it every round.
+
+Its default tiers, which a behavior or `args.models` overrides:
+
+| stage | model | effort | why |
+| --- | --- | --- | --- |
+| Red | opus | high | the test is the behavior's contract — its name, its boundary, its assertion. Wrong here and green is wrong quietly |
+| Green | sonnet | medium | the change the red test already specified, bounded and checked by that test |
+| Review | sonnet ×3 | high | three lenses over a small diff see more than one reader does, at a third of the weight each |
+| Fix | opus | high | a finding that survived its lens is where judgement is owed, and this is the only stage that edits reviewed code |
+| Commit | haiku | low | a message, from a diff |
 
 | line | where it came from |
 | --- | --- |
@@ -98,7 +128,7 @@ needed gets cut.
 | the review lenses in `parallel` | the one stage that only reads. Three lenses over one small diff cost what one reader costs, and the reference's perspective-diverse rule says a finding that can fail in several ways needs a reader per way |
 | `correctness`, `design`, `security` as the three | the two reviews step 6 runs, plus the structural read that `software-design:design-philosophy` owns and neither `/code-review` nor `/security-review` is asked for. A loop-level lens is cheaper than the same finding surviving to the final cycle |
 | no `isolation` | the loops share the branch's working tree deliberately: a worktree per agent would strand each commit on a tree that is thrown away |
-| the model per stage | asked for: "smart model allocation, not blatantly defaulted to the main session's model". The reference says to inherit unless a tier is clearly right, and in this loop each stage is a different job — see the table in `build-workflow.md` |
+| the model per stage | asked for: "smart model allocation, not blatantly defaulted to the main session's model". The reference says to inherit unless a tier is clearly right, and in this loop each stage is a different job — see the table above |
 | Red on opus, Green on sonnet | the test is where the behavior gets its contract: its name, its boundary, its assertion. Wrong there and green is wrong quietly, which is the one failure the loop cannot catch. Green is the change that test already specified, and the test is the check on it |
 | Fix on opus | a finding that survived its lens is where judgement is owed, and it is the only stage that edits code a reviewer already read |
 | Commit on haiku | a message, from a diff |

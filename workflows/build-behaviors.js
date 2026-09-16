@@ -1,43 +1,7 @@
-# The build workflow
-
-Step 4 of `implement-design` runs as one `Workflow` call. The loop is control
-flow — red, green, reviewed, committed, once per behavior — so the script
-holds it and the model stops re-deciding it every round. The script is also
-where each stage gets the model it deserves.
-
-## Shape
-
-Behaviors run **in sequence**: one working tree, one commit each, and a
-behavior often builds on the one before it. Inside a behavior the review
-**fans out**, because lenses only read.
-
-Set no `isolation` — the loops share the branch's working tree on purpose,
-and a worktree would strand the commits off it.
-
-## Model allocation
-
-Inherit nothing by default here: each stage asks for something different.
-The table is the default. A behavior arrives with `models` of its own when
-the session can see this one is subtler or flatter than the rest, and
-`args.models` moves a whole stage for a run.
-
-| stage | model | effort | why |
-| --- | --- | --- | --- |
-| Red | opus | high | the test is the behavior's contract — its name, its boundary, its assertion. Wrong here and green is wrong quietly |
-| Green | sonnet | medium | the change the red test already specified, bounded and checked by that test |
-| Review | sonnet ×3 | high | three lenses over a small diff see more than one reader does, at a third of the weight each |
-| Fix | opus | high | a finding that survived its lens is where judgement is owed, and this is the only stage that edits reviewed code |
-| Commit | haiku | low | a message, from a diff |
-
-## The script
-
-Pass the behaviors in as `args`: one entry per acceptance criterion, in
-build order, each carrying what step 3 settled about it.
-
-```js
 export const meta = {
   name: 'build-behaviors',
   description: 'Build each behavior test-first: red, green, reviewed, committed',
+  whenToUse: 'Step 4 of implement-design, once the reading\'s criteria are settled',
   phases: [
     { title: 'Red', detail: 'one failing test per behavior', model: 'opus' },
     { title: 'Green', detail: 'the code that passes it', model: 'sonnet' },
@@ -140,7 +104,3 @@ for (const [i, behavior] of args.behaviors.entries()) {
 }
 
 return built
-```
-
-The run returns one row per behavior: the criterion, the test that met it,
-and how many findings its loop fixed. That is what step 6 reports from.
