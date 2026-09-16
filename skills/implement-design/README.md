@@ -4,9 +4,10 @@ Implement one ticket of a design. It runs in a fresh session after
 `design-interview` has closed the tree, written the brief and the ADRs, and
 left the open questions on the tracker as tickets.
 `/implement-design <ticket> [@peer ...]`: the ticket first, then the sessions
-worth asking, the design interview above all. The `design` plugin it leans on
-(Tobias Karlsson's, `the-exodus/claude-design-skills`) is pulled in by this
-repository's marketplace as a dependency of the plugin carrying this skill.
+worth asking, the design interview above all. The design plugin it leans on
+(Tobias Karlsson's `design`, `the-exodus/claude-design-skills`) is pulled in by
+this repository's marketplace as `software-design`, a dependency of `build`, the
+plugin carrying this skill.
 
 The skill is the prompt it replaces, made to survive a fresh session:
 
@@ -39,7 +40,7 @@ row rewritten to say what went wrong; a line no run ever needed gets cut.
 | `in one message` | asked for: "any clarifying questions you may have", a batch before building, in place of one at a time across the build |
 | `Names are up for debate` | asked for, from a note handed over with the ticket: the names in it are proposals and better ones are welcome. The rule the proposals are judged by, call it what it is, lives in my global instructions, so this line grants the challenge and leaves the criterion where every session already has it |
 | `Done is every acceptance criterion met by a check you ran` | borrowed from the record of `grill-to-build` (`mattiasthalen/skills`): five decision records, five confirmation sections naming checks nobody had written. Derive what you tell me from a check that ran |
-| `Structure the ticket leaves open follows design:design-philosophy` | the `design-philosophy` skill says of itself that it applies when an agent implements from a spec with structural decisions still open, and its description would trigger on that. A must-have target behind a far pointer is a variance bug, so the skill names it in one line rather than trusting the description to fire |
+| `Structure the ticket leaves open follows software-design:design-philosophy` | the `design-philosophy` skill says of itself that it applies when an agent implements from a spec with structural decisions still open, and its description would trigger on that. A must-have target behind a far pointer is a variance bug, so the skill names it in one line rather than trusting the description to fire |
 | `A design decision the code refuses comes back to me first` | the interview's contradiction rule, carried to build time: a decision the design made is not the implementer's to remake, and a workaround typed at the moment the code refuses it is exactly that. Seen in ordinary sessions, not measured |
 | `mine included` | an answer I give in step 3 or on a refused decision is a decision made while building too, and one that reverses an ADR is a supersession, which the `adr` skill owns once it is handed the decision |
 | `a real fork existed, its consequences outlive the change, and a future reader would ask why` | the ADR-worthy test from `design-interview`'s `artifacts.md`, all three at once. Inlined because the interview's text is not in a fresh session's context, and it is the one definition the step turns on |
@@ -76,7 +77,9 @@ Three things it flagged stand, with their reason:
   call among the reads of step 1, and the wait it makes visible is one I
   otherwise cannot see.
 
-The two pointers into the design plugin are namespaced, `design:adr` and
-`design:design-philosophy`, since a pointer reaches its target by the name
-the harness lists, and the plugin this marketplace pulls in is named
-`design`.
+The two pointers into the design plugin are namespaced, `software-design:adr`
+and `software-design:design-philosophy`, since a pointer reaches its target by
+the name the harness lists. This marketplace pulls the plugin in under
+`software-design` because its own name, `design`, is also the name of an
+Anthropic skill, and a pointer that says `design` reaches whichever answers
+first.

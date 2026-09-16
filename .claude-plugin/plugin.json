@@ -1,9 +1,9 @@
 {
   "$schema": "https://anthropic.com/claude-code/plugin.schema.json",
-  "name": "build-design",
-  "displayName": "Build design",
+  "name": "build",
+  "displayName": "Build",
   "version": "0.1.0",
-  "description": "Build what a design interview decided. One skill for now: implement-design, one ticket of the design in a fresh session. Depends on the design plugin.",
+  "description": "Build what a design interview decided. One skill for now: implement-design, one ticket of the design in a fresh session. Depends on software-design, the design plugin.",
   "author": {
     "name": "Mattias Thalén",
     "url": "https://github.com/mattiasthalen"
@@ -18,6 +18,6 @@
     "tickets"
   ],
   "dependencies": [
-    "design"
+    "software-design"
   ]
 }
