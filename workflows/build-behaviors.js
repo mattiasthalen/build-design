@@ -110,7 +110,7 @@ for (const [i, behavior] of args.behaviors.entries()) {
 
   phase('Green')
   const green = await agent(
-    `Make ${red.testPath} pass. The failure to clear: ${red.failure}\n\n` +
+    `Make ${red.testPath} pass. The failure to clear: ${red.failure}\n\n${behavior.notes ?? ''}\n\n` +
     `Smallest change that earns it. Leave the test alone. Run the whole suite and report whether it is green. ` +
     `Stage the slice when it is — \`git add -A\` — so the review reads the new test with the change. ` +
     `Report every fork you took that the behavior did not settle, with what you rejected — a shape the ` +
@@ -126,7 +126,8 @@ for (const [i, behavior] of args.behaviors.entries()) {
   const findings = (await parallel(LENSES.map((lens) => () =>
     agent(
       `Review this slice — \`git diff --cached\`, the new test ${red.testPath} and the change that passes it — ` +
-      `through one lens: ${lens}. Report only what this lens sees, in the slice itself.`,
+      `through one lens: ${lens}. The slice is the subject, not the file around it: report what this lens sees ` +
+      `in the lines the slice added or changed, and leave what was already there to whoever wrote it.`,
       { label: `review ${at}: ${lens.split(':')[0]}`, phase: 'Review', ...tier('review', behavior), schema: FINDINGS })
   ))).filter(Boolean).flatMap((r) => r.findings)
 
@@ -134,17 +135,20 @@ for (const [i, behavior] of args.behaviors.entries()) {
   if (findings.length) {
     phase('Review')
     fixes = await agent(
-      `Fix these findings in the slice, keeping every test green, and stage what you change:\n` +
+      `Fix these findings in the slice, keeping every test green, and stage what you change. ` +
+      `${behavior.notes ?? ''}\n\n` +
       findings.map((f) => `- ${f.file}${f.line ? `:${f.line}` : ''} — ${f.finding}`).join('\n') +
       `\n\nA finding you judge wrong stays unfixed and comes back with the reason, which is a fork like ` +
-      `any other. Report every fork the fixes took.`,
+      `any other, and so does one about code this slice did not touch: widening the slice is not fixing it. ` +
+      `Report every fork the fixes took.`,
       { label: `fix ${at}`, phase: 'Review', ...tier('fix', behavior), schema: DECISIONS })
   }
 
   phase('Commit')
   const commit = await agent(
-    `Commit the staged slice. The message names the behavior — ${behavior.criterion} — and says why it is built ` +
-    `this way. Return the commit's sha, or say what refused it.`,
+    `Commit the staged slice in the repository holding ${red.testPath} — cd there first. The message names the ` +
+    `behavior — ${behavior.criterion} — and says why it is built this way. Return the commit's sha, or say what ` +
+    `refused it.`,
     { label: `commit ${at}`, phase: 'Commit', ...tier('commit', behavior), schema: COMMIT })
 
   if (!commit?.sha) {
