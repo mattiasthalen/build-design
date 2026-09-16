@@ -31,7 +31,11 @@ marketplace, since it calls `software-design:adr` and
 
 ```
 cp -r skills/implement-design ~/.claude/skills/
+cp workflows/*.js ~/.claude/workflows/
 ```
+
+`implement-design` calls `the-reading` and `build-behaviors` by name, so the
+workflows travel with it. Installed as a plugin they are already there.
 
 ## What is here
 
@@ -48,6 +52,7 @@ cp -r skills/implement-design ~/.claude/skills/
 skills/<name>/
   SKILL.md                        the skill
   README.md                       what it is for, and where its rules came from
+workflows/<name>.js               a workflow a skill calls by name
 ```
 
 The repository is both the marketplace, `build-design`, and one of the two
@@ -57,8 +62,10 @@ plugins it serves, `build`, so that entry takes `"source": "./"`. The other,
 renamed on the way in. Moving to a newer one is editing that `sha` and the
 `version` beside it, and nothing else.
 
-Skills are discovered from `skills/`, so adding one is a directory there and
-nothing else. `plugin.json` and the marketplace entry both carry the name and
+Skills are discovered from `skills/` and workflows from `workflows/`, so
+adding either is a file there and nothing else. A workflow is named by the
+`meta.name` in its script, which is the name a skill calls and need not match
+the filename — keep them the same anyway. `plugin.json` and the marketplace entry both carry the name and
 version, and `claude plugin tag` fails if they drift apart.
 
 `SKILL.md` carries its name in the front matter. Without it the invocation name
