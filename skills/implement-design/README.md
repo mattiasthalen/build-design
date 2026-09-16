@@ -188,13 +188,16 @@ inside `SKILL.md` would bury the steps around them — the ladder's
 disclosed-reference rung, and the one rung that costs nothing here, since
 every run reads the file anyway when it reaches the step.
 
-Two things about the plan gate are unverified. Plan mode enforces
-read-only except the plan file, and a workflow's agents inherit the
-session's permission context, so `the-reading` should run inside it and
-`build-behaviors` could not — which is the order the skill wants anyway. No
-run has proved the first half. If the harness turns out to refuse `Workflow`
-in plan mode outright, the fix is to read before entering it, and this
-paragraph becomes a row with an incident in it.
+The plan gate was written against an assumption, and the assumption has
+been run. `the-reading` executes inside plan mode: the `Workflow` call is
+accepted there, and the whole script completed — two sources read in
+parallel, synthesis, three critique lenses, revise — as 7 agents with no
+errors, the read agents using `Read` and `Bash` and every one of them
+returning a schema-valid object. Run `wf_63a72e15-eba`, 306 seconds on
+haiku throughout. Plan mode's own rule is read-only except the plan file,
+which is why the order is what it is: `the-reading` only reads, so it
+belongs before approval, and `build-behaviors` writes, so it belongs
+after.
 
 The allocation lines went through it as a third pass, which cut two things
 from one paragraph: "Two rules follow", a signpost for two sentences already
