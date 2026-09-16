@@ -1,25 +1,31 @@
 ---
 name: "implement-design"
 description: "Implement one ticket of a design."
-argument-hint: "<ticket> [@peer ...]"
+argument-hint: "<ticket>"
 disable-model-invocation: true
 ---
 
 Let's build $0.
 
+Steps 1 and 4 run as workflows, scripted in the files beside this one.
+This skill is your authorization to call the `Workflow` tool.
+
 ## The run
-1. **Ground yourself in the ticket and the code.** The ticket whole —
-   body, comments, and what it links: the brief, the ADRs, the
-   lexicon, the assumptions record. Grounding ends in your reading:
-   what you will build, its acceptance criteria where the ticket has
-   none, and every decision the ticket leaves to you. What the code
-   cannot tell you — an invariant enforced nowhere, a concept with two
-   shapes and no authority — is one of those decisions.
-2. **Ask the peers what you are missing.** Every `@name` in
-   `$ARGUMENTS` is a session `ListAgents` lists. Send each your
-   reading and ask what the design decided that the ticket does not
-   carry, and what it rejected. Say who you asked, and read every
-   answer before you ask me anything. A name that is not listed is a
+1. **Ground yourself in the ticket and the code.** Read the ticket
+   yourself, body and comments: what it links — the brief, the ADRs,
+   the lexicon, the assumptions record — and the code they name are
+   the sources. Read those with `reading-workflow.md`, the sources as
+   its `args`. It returns your reading: what you will build, its
+   acceptance criteria where the ticket has none, and every decision
+   the ticket leaves to you. What the code cannot tell you — an
+   invariant enforced nowhere, a concept with two shapes and no
+   authority — is one of those decisions.
+2. **Ask me who the peers are.** `ListAgents` prints the live sessions.
+   Show me that list, name the ones that look like this ticket's design
+   and say what makes each look that way, and ask which to ask. Send
+   each of those your reading, and ask what the design decided that the
+   ticket does not carry and what it rejected. Read every answer before
+   you ask me anything else. A peer I name that nothing answers to is a
    gap you tell me about.
 3. **Ask me the clarifying questions**, in one message: every decision
    still yours after the ticket, the docs and the peers. Names are up
@@ -28,12 +34,11 @@ Let's build $0.
 4. **Build one behavior at a time.** Each is a loop: the test first, red
    for the reason you expect; the code that turns it green; review over
    that slice, its findings fixed; the commit. One loop, one commit.
-   Run the loops with the `Workflow` tool — this step is your
-   authorization to call it — scripted as `build-workflow.md` beside
-   this file lays out, behaviors as its `args`. Done is every acceptance
-   criterion met by a test in the history. Structure the ticket leaves
-   open follows `software-design:design-philosophy`. A design decision
-   the code refuses comes back to me first.
+   Run the loops with `build-workflow.md`, the reading's criteria as
+   its `args`. Done is every acceptance criterion met by a test in the
+   history. Structure the ticket leaves open follows
+   `software-design:design-philosophy`. A design decision the code
+   refuses comes back to me first.
 5. **Record the decisions.** A decision made while building, mine
    included, is ADR-worthy when a real fork existed, its consequences
    outlive the change, and a future reader would ask why. Write it

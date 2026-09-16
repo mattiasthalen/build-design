@@ -3,8 +3,9 @@
 Implement one ticket of a design. It runs in a fresh session after
 `design-interview` has closed the tree, written the brief and the ADRs, and
 left the open questions on the tracker as tickets.
-`/implement-design <ticket> [@peer ...]`: the ticket first, then the sessions
-worth asking, the design interview above all. The design plugin it leans on
+`/implement-design <ticket>`: the ticket is the whole argument, and the
+sessions worth asking — the design interview above all — are a question the
+skill puts to me in step 2. The design plugin it leans on
 (Tobias Karlsson's `design`, `the-exodus/claude-design-skills`) is pulled in by
 this repository's marketplace as `software-design`, a dependency of `build`, the
 plugin carrying this skill.
@@ -17,9 +18,13 @@ The skill is the prompt it replaces, made to survive a fresh session:
 > decisions that are made during implementation should be written before
 > running the review cycle.
 
-Six steps, one artifact between them: the reading, written at the end of
+Six steps, one artifact between them: the reading, synthesized at the end of
 step 1, corrected by the peers in step 2, and put to me in step 3 as the
-questions. What survives that is what gets built.
+questions. What survives that is what gets built — its criteria become the
+behaviors step 4 builds one loop at a time.
+
+Steps 1 and 4 are workflows, scripted in `reading-workflow.md` and
+`build-workflow.md` beside the skill, each with its own rows below.
 
 ## Where each line came from
 
@@ -33,11 +38,17 @@ needed gets cut.
 | `implement-design`, the name | asked for, with the rule that came with it: call it what it is. The skill implements a design, one ticket of it; `implement` alone said what every build session does |
 | `Let's build $0` and the six steps | the prompt above, typed by hand at the start of every build session. Asked for, not measured |
 | `body, comments, and what it links: the brief, the ADRs, the lexicon, the assumptions record` | what `design-interview` leaves behind. The brief lives on the ticket or in the docs directory and is spent when the feature ships; the ADRs, the lexicon and the assumptions record outlive it and are the project's. A fresh session reads the issue body by default and stops there |
+| `Read the ticket yourself ... and the code they name are the sources` | the reference's hybrid rule: scout inline, then orchestrate. The source list is what the ticket links, so it cannot be an argument to the read — it is the read's first finding. The ticket is also the one source every later prompt carries |
+| `Read those with reading-workflow.md, the sources as its args` | suggested, of the peer step, and true one step earlier. Six artifacts read in sequence land in a context the last of them is crowding, and the ADR read at position six gets the attention position six has left. One agent per source reads all of them at full weight, and the synthesis sees six slices instead of one fading memory. The peers are why it is step 1 and not step 2: a peer is a live session holding the interview, and a subagent spawned to stand in for one holds nothing the main session could not read itself |
+| `Steps 1 and 4 run as workflows ... your authorization` | the `Workflow` tool refuses to run without explicit opt-in, and names a skill's instructions as one of the forms that opt-in takes. Without the line the model reaches step 1, reads the tool's own rule, and builds inline instead. Written once above the run rather than in both steps, since it is one permission and not two |
 | `its acceptance criteria where the ticket has none` | `design-interview`'s claim that criteria written from the design alone prove the design is done. A ticket that did not come from it has none, and then the reading carries them, for me to confirm in step 3 |
 | `What the code cannot tell you ... is one of those decisions` | `design-interview`'s Phase 2: exploration reads what is there and is blind to what isn't, and the absences are decisions. At build time the same absence gets enforced silently or stepped around; naming it a decision puts it in the questions |
-| `Every @name in $ARGUMENTS is a session ListAgents lists` | how Claude Code addresses another session: the name `ListAgents` prints is the address, and `SendMessage` delivers to it. Written as `$ARGUMENTS` inside the sentence because `$0` alone would swallow the peers: once one placeholder receives an argument the harness appends nothing, so every `@name` after the ticket would be typed and never seen |
+| `Ask me who the peers are` | the peers were first an argument, `/implement-design <ticket> @peer ...`, on the assumption that a session is tagged the way a file is. There is no tagging in the message that starts a session, so a peer arrived as a hand-typed name — approximate, unverifiable, and demanding I remember the roster before the skill had shown it to me. The skill holds the roster: `ListAgents` prints it, so it asks. The argument is the ticket and nothing else |
+| `Show me that list, name the ones that look like this ticket's design and say what makes each look that way` | the question has to be answerable at a glance. A bare list makes me read every session title; a list with a recommendation and its evidence makes me confirm or correct one. The evidence is what lets me correct it — a title that matches the feature is a guess, not a design interview |
+| `ask which to ask` | mine to decide, and cheap to decide: a peer that was never in the design costs a message and an answer worth nothing, and a peer left out costs the half of the design it was holding |
+| `A peer I name that nothing answers to is a gap you tell me about` | I can still name a session the list does not have, from memory of a session that has since ended. Silently dropping it loses what that peer held; saying so lets me go find it |
 | `what the design decided that the ticket does not carry, and what it rejected` | the interview's own rule for surfacing an ADR: the rejected half is the valuable half, since without it the same option gets re-proposed and ruled out a second time. Asked for as "in case you're missing something"; this is the shape the question has to take to get that back |
-| `Say who you asked, and read every answer before you ask me anything` | a peer's reply arrives when that session next takes a turn, which may be after this one ends. Saying who was asked makes the wait visible to me, and reading every answer first keeps the questions to me down to what no one else could settle |
+| `Read every answer before you ask me anything else` | a peer's reply arrives when that session next takes a turn, which may be after this one ends, so the questions to me wait on a list I named myself and can see outstanding. Reading every answer first keeps those questions down to what no one else could settle. "Say who you asked" stood here while the peers were an argument; step 2 now asks me who they are, so I already know |
 | `in one message` | asked for: "any clarifying questions you may have", a batch before building, in place of one at a time across the build |
 | `Names are up for debate` | asked for, from a note handed over with the ticket: the names in it are proposals and better ones are welcome. The rule the proposals are judged by, call it what it is, lives in my global instructions, so this line grants the challenge and leaves the criterion where every session already has it |
 | `Done is every acceptance criterion met by a test in the history` | borrowed from the record of `grill-to-build` (`mattiasthalen/skills`): five decision records, five confirmation sections naming checks nobody had written. Derive what you tell me from a test that ran, and one a reader can find in the commits rather than in a claim |
@@ -45,10 +56,8 @@ needed gets cut.
 | `red` / `green` | `writing-for-agents`' leading-word lever, and its own worked example: "a loop you believe in" → _red_, a fuzzy gate turned into a binary state the model can observe. Two pretrained words carry the whole TDD cycle that "watched failing for the reason you expect, then the code that passes it" spent a line on |
 | `for the reason you expect` | red alone is not evidence: an import error, a missing fixture, an assertion that never ran are all red. The reason is what distinguishes a test that describes the behavior from one that describes a typo |
 | `review over that slice, its findings fixed` | asked for: the review cycle ran once, at the end, over the whole diff, so a habit set in loop one was found in loop nine and cost every loop after it. A slice review is cheap, its findings are local, and it keeps the final cycle for what only the whole shows |
-| `Run the loops with the Workflow tool` | asked for. The loop is control flow — fixed order, fixed count, one commit each — and the `Workflow` tool is where control flow stops being a judgement the model remakes every round. It also buys the per-stage model allocation that a single session cannot have |
-| `this step is your authorization to call it` | the `Workflow` tool refuses to run without explicit opt-in, and names a skill's instructions as one of the forms that opt-in takes. Without the clause the model reaches step 4, reads the tool's own rule, and builds inline instead |
-| `scripted as build-workflow.md beside this file lays out` | progressive disclosure: the script is forty lines of reference that only step 4 reads, and inlining it would bury the other five steps. Named by path rather than by skill pointer, since a file in the skill's own folder is reached by reading it |
-| `behaviors as its args` | the script needs the acceptance criteria and what step 3 settled about each. `args` is how a workflow takes input; without the phrase the model writes the behaviors into the script text, and the script stops being the same script twice |
+| `Run the loops with build-workflow.md` | asked for. The loop is control flow — fixed order, fixed count, one commit each — and the `Workflow` tool is where control flow stops being a judgement the model remakes every round. It also buys the per-stage model allocation that a single session cannot have. The script is named by path, not by a skill pointer: a file in the skill's own folder is reached by reading it. Both scripts sit outside `SKILL.md` because each is forty lines that one step reads, and inlining either would bury the other five steps |
+| `the reading's criteria as its args` | the two workflows are one pipe: step 1's `criteria` are step 4's `behaviors`, each with the check that proves it. `args` is how a workflow takes input; without the phrase the model writes the behaviors into the script text, and the script stops being the same script twice |
 | `The loop reviews saw slices; this one sees what they add up to` | the final cycle's reason for surviving the per-loop reviews — without it the model reads step 6 as the work step 4 already did. Duplication across slices, a seam neither side owns, an ADR written in step 5 and reviewed by nobody: none of it is visible inside one loop |
 | `Structure the ticket leaves open follows software-design:design-philosophy` | the `design-philosophy` skill says of itself that it applies when an agent implements from a spec with structural decisions still open, and its description would trigger on that. A must-have target behind a far pointer is a variance bug, so the skill names it in one line rather than trusting the description to fire |
 | `A design decision the code refuses comes back to me first` | the interview's contradiction rule, carried to build time: a decision the design made is not the implementer's to remake, and a workaround typed at the moment the code refuses it is exactly that. Seen in ordinary sessions, not measured |
@@ -57,6 +66,23 @@ needed gets cut.
 | `before the review cycle runs` | asked for. The ADRs are in the diff the reviewers read, and a decision written after the review is a decision the review never saw |
 | `/code-review and /security-review ... and both run again` | the two reviews `grill-to-build`'s record has the driver running after every slice, which is what "the review cycle" has meant so far, made a loop with an end: a pass that finds nothing. The pair is a guess at the name's meaning, to be corrected by the first run that means something else |
 | `disable-model-invocation: true` | as in `grill-to-build`: the skill runs when I type `/implement-design` and never because a message matched its description, so the description is a one-line summary for the `/` menu and the skill costs a session nothing until called |
+
+## The reading workflow
+
+`reading-workflow.md` is step 1's script.
+
+| line | where it came from |
+| --- | --- |
+| the sources in `parallel`, the synthesis behind a barrier | the reference's own Understand pattern, and the one barrier it calls justified: the reading is a single document and every slice bears on it. The reads themselves share nothing and only read |
+| `record` and `code` as the two kinds | a document says what it says and the read is extraction; code has to be inferred from, and what it leaves unsaid is what step 1 turns into a decision. One prompt for both kinds asks the document reader for absences it cannot have and lets the code reader answer as if the code were a document |
+| `An absence is a finding here, not a gap in your reading` | an agent told to report what a source says treats what it does not say as its own failure and hunts harder instead of reporting. The code reader's whole value is the second list |
+| `every decision it records with what that decision rejected` | the same rule the peers are asked under, applied to the ADRs directly: without the rejected half the option gets re-proposed at build time and ruled out a second time |
+| `Two sources that disagree are a decision, not a merge` | the synthesis stage is the one place two artifacts meet, and a model handed both will reconcile them into prose that sounds settled. A lexicon and an ADR that disagree about a name is exactly what step 3 exists to put to me |
+| the three critique lenses | coverage (a source nobody read, a claim with no source), absence (step 1's own line, turned on the reading itself), criteria (a check that could not fail). A reading is wrong in three unrelated ways, and one critic asked for all three returns the easiest |
+| `a name that says how instead of what` | my global rule, inside the absence lens. Step 3 already says names are up for debate; naming the test in the lens is what surfaces the candidates in time for that conversation |
+| one revision round, not a loop | the lenses read a document they have already seen; a second round grades the revision rather than the reading. The gaps that survive belong in step 3's questions, where I answer them |
+| `A gap you judge wrong stays open and its entry says why` | the fix stage's rule in the build workflow, for the same reason: the reviser is the critic's peer, and a gap argued down is a better reading than a gap papered over |
+| Read on sonnet, Synthesize on opus | the reads are bounded — one source, one prompt, one shape of answer. The synthesis holds every slice at once and everything after step 1 is built on what it writes, including the criteria the build workflow turns into behaviors |
 
 ## The build workflow
 
@@ -92,17 +118,19 @@ written, as `CLAUDE.md` asks. It cut four things and moved one:
 - The ticket without acceptance criteria was first a clause in step 4, and
   moved to step 1, where the reading it belongs to is defined.
 
-Three things it flagged stand, with their reason:
+Three things it flagged stood, with their reason. Two of them are gone
+since, both with the peers-as-argument:
 
 - `$ARGUMENTS` substituted into the middle of a sentence reads oddly once
-  expanded, "Every `@name` in `#12 @design` is a session". It stays for
-  the reason in the table: the alternative loses the peers.
+  expanded, "Every `@name` in `#12 @design` is a session". It stood because
+  the alternative lost the peers; retired with the argument itself, and `$0`
+  is the only placeholder left.
 - The `design-philosophy` pointer, on a skill whose description would
   trigger on its own: the table's row. One line against a coin flip.
 - "Say who you asked", which describes what the model would report anyway
-  when it sends a message: it does not, reliably, when the send is one tool
-  call among the reads of step 1, and the wait it makes visible is one I
-  otherwise cannot see.
+  when it sends a message: it did not, reliably, when the send was one tool
+  call among the reads of step 1. Retired since, by the step that asks me
+  who the peers are.
 
 The loop and the workflow went through it as a second pass. It took three
 things out of step 4:
@@ -117,10 +145,15 @@ things out of step 4:
 - "then ... then ... then", the third time: the semicolons already order the
   loop.
 
-And it decided where the script lives. Forty lines of schema and prompt
-inside `SKILL.md` would bury the five steps around step 4 — the ladder's
+And it decided where the scripts live. Forty lines of schema and prompt
+inside `SKILL.md` would bury the steps around them — the ladder's
 disclosed-reference rung, and the one rung that costs nothing here, since
 every run reads the file anyway when it reaches the step.
+
+The reading workflow went through it too, and moved one line: the
+authorization to call `Workflow`, written into step 4 and then into step 1
+as well. One permission stated twice is duplication, and it now sits once
+above the run, where both steps are in view.
 
 The two pointers into the design plugin are namespaced, `software-design:adr`
 and `software-design:design-philosophy`, since a pointer reaches its target by
