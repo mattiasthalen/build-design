@@ -20,7 +20,7 @@ The skill is the prompt it replaces, made to survive a fresh session:
 
 Six steps, one artifact between them: the reading, synthesized at the end of
 step 1, corrected by the peers in step 2, and put to me in step 3 as the
-questions. What survives that is what gets built — its criteria become the
+questions and then as the plan. What survives that is what gets built — its criteria become the
 behaviors step 4 builds one loop at a time.
 
 Steps 1 and 4 are workflows the plugin ships — `the-reading` and
@@ -46,8 +46,13 @@ needed gets cut.
 | `Keep what a workflow returns ... leave how it got there in the run` | the main session's context is the scarce one — it survives every step, and everything it reads it carries to the end. A workflow's agents each get their own, so the source text, the diffs and the review bodies cost nothing there and cost the rest of the run if they land here. The `Workflow` reference says the same thing from the other side: an agent's final text is the return value, not a report |
 | `Each workflow's default tiers are in workflows.md ... travels in args with the tier you give it` | asked for: the plan picks the models, and a table frozen in a script cannot know that this ticket's ADR settled the whole feature while its lexicon is six lines. Three layers, narrowest wins — the script's default, `args.models` for a run, the source's or behavior's own — so the common case stays silent and the exception is one field |
 | `workflows this plugin ships, called by name and never read` | asked for. A script the session reads to run it costs that session the whole script; a workflow the plugin ships is invoked by its `meta.name` and costs the call. `workflows.md` is what remains in the skill: the args each one takes and what it returns, which the caller genuinely needs, and nothing about how either runs. Plugins auto-load `workflows/` at their root, so shipping them is a directory |
-| `every tier you moved off its default, with what ... moved it` | the tiers are guesses until a run has an opinion. Reporting only the moves keeps the report short and puts the evidence where the next edit to the table needs it |
+| `every tier the plan moved off its default, with what ... moved it` | the tiers are guesses until a run has an opinion. Reporting only the moves keeps the report short and puts the evidence where the next edit to the table needs it |
 | `Steps 1 and 4 run as workflows ... your authorization` | the `Workflow` tool refuses to run without explicit opt-in, and names a skill's instructions as one of the forms that opt-in takes. Without the line the model reaches step 1, reads the tool's own rule, and builds inline instead. Written once above the run rather than in both steps, since it is one permission and not two |
+| `Steps 1 to 3 are plan mode: EnterPlanMode first` | asked for, and the mechanism the run was already reaching for. Steps 1 to 3 read, ask and decide and write nothing but the plan, which is exactly what plan mode enforces; step 4 is the first step that touches the tree. The reading workflow runs inside it because its agents only read |
+| the plan file as the artifact | plan mode already has one, and `ExitPlanMode` puts what is in it to me. The reading was previously something the model held and paraphrased into questions; written to the plan file it is a document I read once and approve, which is also the cheapest way to review an allocation before it is spent |
+| `the tier each stage will run on` | the tiers are the model's own judgement about my money, and the plan is the one moment they are cheap to correct. Naming them there turns "smart allocation" from a thing I find out afterwards into a line I can move before the run |
+| `ExitPlanMode is where I approve it` | it replaced "Build when I have answered", which asked the model to decide that my answers amounted to consent. `ExitPlanMode` is consent with a mechanism: rejecting it keeps the session in plan mode, so a no costs nothing and leaves the plan open to edit |
+| `in one AskUserQuestion` | asked for as "any clarifying questions you may have", a batch before building. Written as the tool rather than "in one message" because plan mode's own protocol says to use it for the open questions and to keep `ExitPlanMode` for the approval — asking "is this plan good?" through the question tool is the one thing that does not work |
 | `its acceptance criteria where the ticket has none` | `design-interview`'s claim that criteria written from the design alone prove the design is done. A ticket that did not come from it has none, and then the reading carries them, for me to confirm in step 3 |
 | `What the code cannot tell you ... is one of those decisions` | `design-interview`'s Phase 2: exploration reads what is there and is blind to what isn't, and the absences are decisions. At build time the same absence gets enforced silently or stepped around; naming it a decision puts it in the questions |
 | `Ask me who the peers are` | the peers were first an argument, `/implement-design <ticket> @peer ...`, on the assumption that a session is tagged the way a file is. There is no tagging in the message that starts a session, so a peer arrived as a hand-typed name — approximate, unverifiable, and demanding I remember the roster before the skill had shown it to me. The skill holds the roster: `ListAgents` prints it, so it asks. The argument is the ticket and nothing else |
@@ -56,7 +61,6 @@ needed gets cut.
 | `A peer I name that nothing answers to is a gap you tell me about` | I can still name a session the list does not have, from memory of a session that has since ended. Silently dropping it loses what that peer held; saying so lets me go find it |
 | `what the design decided that the ticket does not carry, and what it rejected` | the interview's own rule for surfacing an ADR: the rejected half is the valuable half, since without it the same option gets re-proposed and ruled out a second time. Asked for as "in case you're missing something"; this is the shape the question has to take to get that back |
 | `Read every answer before you ask me anything else` | a peer's reply arrives when that session next takes a turn, which may be after this one ends, so the questions to me wait on a list I named myself and can see outstanding. Reading every answer first keeps those questions down to what no one else could settle. "Say who you asked" stood here while the peers were an argument; step 2 now asks me who they are, so I already know |
-| `in one message` | asked for: "any clarifying questions you may have", a batch before building, in place of one at a time across the build |
 | `Names are up for debate` | asked for, from a note handed over with the ticket: the names in it are proposals and better ones are welcome. The rule the proposals are judged by, call it what it is, lives in my global instructions, so this line grants the challenge and leaves the criterion where every session already has it |
 | `Done is every acceptance criterion met by a test in the history` | borrowed from the record of `grill-to-build` (`mattiasthalen/skills`): five decision records, five confirmation sections naming checks nobody had written. Derive what you tell me from a test that ran, and one a reader can find in the commits rather than in a claim |
 | `Each is a loop: ... One loop, one commit` | a run of the six steps wrote every function, then every test, then committed. Nothing in step 4 said otherwise: "Build" is one word and the acceptance criteria are a list, so the model batched them and lost the feedback loop. Naming the loop and naming the commit as its unit is what makes a criterion's test land before its code |
@@ -183,6 +187,14 @@ And it decided where the scripts live. Forty lines of schema and prompt
 inside `SKILL.md` would bury the steps around them — the ladder's
 disclosed-reference rung, and the one rung that costs nothing here, since
 every run reads the file anyway when it reaches the step.
+
+Two things about the plan gate are unverified. Plan mode enforces
+read-only except the plan file, and a workflow's agents inherit the
+session's permission context, so `the-reading` should run inside it and
+`build-behaviors` could not — which is the order the skill wants anyway. No
+run has proved the first half. If the harness turns out to refuse `Workflow`
+in plan mode outright, the fix is to read before entering it, and this
+paragraph becomes a row with an incident in it.
 
 The allocation lines went through it as a third pass, which cut two things
 from one paragraph: "Two rules follow", a signpost for two sentences already
