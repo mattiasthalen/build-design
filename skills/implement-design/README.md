@@ -23,9 +23,10 @@ questions. What survives that is what gets built.
 
 ## Where each line came from
 
-No run has broken this skill yet, so the table pairs lines with their
-sources and not with incidents. A line that a run breaks without gets its
-row rewritten to say what went wrong; a line no run ever needed gets cut.
+Most rows pair a line with its source rather than with an incident; the
+loop in step 4 is the first line a run earned. A line that a run breaks
+without gets its row rewritten to say what went wrong; a line no run ever
+needed gets cut.
 
 | line | where it came from |
 | --- | --- |
@@ -39,7 +40,12 @@ row rewritten to say what went wrong; a line no run ever needed gets cut.
 | `Say who you asked, and read every answer before you ask me anything` | a peer's reply arrives when that session next takes a turn, which may be after this one ends. Saying who was asked makes the wait visible to me, and reading every answer first keeps the questions to me down to what no one else could settle |
 | `in one message` | asked for: "any clarifying questions you may have", a batch before building, in place of one at a time across the build |
 | `Names are up for debate` | asked for, from a note handed over with the ticket: the names in it are proposals and better ones are welcome. The rule the proposals are judged by, call it what it is, lives in my global instructions, so this line grants the challenge and leaves the criterion where every session already has it |
-| `Done is every acceptance criterion met by a check you ran` | borrowed from the record of `grill-to-build` (`mattiasthalen/skills`): five decision records, five confirmation sections naming checks nobody had written. Derive what you tell me from a check that ran |
+| `Done is every acceptance criterion met by a test in the history` | borrowed from the record of `grill-to-build` (`mattiasthalen/skills`): five decision records, five confirmation sections naming checks nobody had written. Derive what you tell me from a test that ran, and one a reader can find in the commits rather than in a claim |
+| `A behavior is a loop: the test first ... then the commit` | a run of the six steps wrote every function, then every test, then committed. Nothing in step 4 said otherwise: "Build" is one word and the acceptance criteria are a list, so the model batched them and lost the feedback loop. Naming the loop and naming the commit as its unit is what makes a criterion's test land before its code |
+| `watched failing for the reason you expect` | a test written after the code passes on the first run and proves nothing; one written first can also pass for the wrong reason — an import error, a fixture, an assertion that never ran. The red is the evidence, so the step asks for the red and for the reason |
+| `code no test drove, or a test you never watched fail, means the loop was skipped` | the two ways the batch comes back once the loop is named: a commit whose tests were written last, and a commit of code no test asked for. Stated as what a skipped loop looks like, since that is what the model can check against its own diff |
+| `/code-review over that slice with its findings fixed` | asked for: the review cycle ran once, at the end, over the whole diff, so a habit set in loop one was found in loop nine and cost every loop after it. A slice review is cheap, its findings are local, and it keeps the final cycle for what only the whole shows |
+| `Each loop's review saw a slice; this one sees what the slices add up to` | the final cycle's reason for surviving the per-loop reviews. Duplication across slices, a seam neither side owns, an ADR written in step 5 and reviewed by nobody: none of it is visible inside one loop |
 | `Structure the ticket leaves open follows software-design:design-philosophy` | the `design-philosophy` skill says of itself that it applies when an agent implements from a spec with structural decisions still open, and its description would trigger on that. A must-have target behind a far pointer is a variance bug, so the skill names it in one line rather than trusting the description to fire |
 | `A design decision the code refuses comes back to me first` | the interview's contradiction rule, carried to build time: a decision the design made is not the implementer's to remake, and a workaround typed at the moment the code refuses it is exactly that. Seen in ordinary sessions, not measured |
 | `mine included` | an answer I give in step 3 or on a refused decision is a decision made while building too, and one that reverses an ADR is a supersession, which the `adr` skill owns once it is handed the decision |
@@ -51,7 +57,9 @@ row rewritten to say what went wrong; a line no run ever needed gets cut.
 ## The writing pass
 
 The skill was run through `mattpocock/skills`' `writing-for-agents` once
-written, as `CLAUDE.md` asks. It cut four things and moved one:
+written, as `CLAUDE.md` asks. The step 4 edit was written in a session where
+that skill was not installed, so it was held to the same cuts by hand and
+owes the pass a real run. It cut four things and moved one:
 
 - "is one of those decisions, not a finding": the negation. The positive
   alone says it.
