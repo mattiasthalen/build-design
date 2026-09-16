@@ -40,23 +40,30 @@ I approve it. Step 4 starts on that approval.
    ticket does not carry and what it rejected. Read every answer before
    you ask me anything else. A peer I name that nothing answers to is a
    gap you tell me about.
-3. **Ask me the clarifying questions**, in one `AskUserQuestion`: every
-   decision still yours after the ticket, the docs and the peers. Names
-   are up for debate — one that does not say what the thing is comes
-   back with the one that does. Then write the plan and put it to me
-   with `ExitPlanMode`.
+3. **Ask me the clarifying questions**, in one message: every decision
+   still yours after the ticket, the docs and the peers. Names are up
+   for debate — one that does not say what the thing is comes back with
+   the one that does. Then write the plan and put it to me with
+   `ExitPlanMode`.
 4. **Build the plan, one behavior at a time.** Each is a loop: the test
    first, red for the reason you expect; the code that turns it green;
    review over that slice, its findings fixed; the commit. One loop, one
    commit. Run the loops with the `build-behaviors` workflow, the plan's
-   behaviors and their tiers as its `args`. Done is every acceptance
-   criterion met by a test in the history. Structure the ticket leaves
-   open follows `software-design:design-philosophy`. A design decision
+   behaviors and their tiers as its `args`; it returns the test that met
+   each criterion, what its review fixed, and the forks its loops took.
+   Done is every acceptance criterion met by a test in the history.
+   Structure the ticket leaves open follows
+   `software-design:design-philosophy`. A design decision
    the code refuses comes back to me first.
-5. **Record the decisions.** A decision made while building, mine
-   included, is ADR-worthy when a real fork existed, its consequences
-   outlive the change, and a future reader would ask why. Write it
-   with the `software-design:adr` skill before the review cycle runs.
+5. **Record the decisions.** A decision made while building, mine and
+   the loops' included, is ADR-worthy when a real fork existed, its
+   consequences outlive the change, and a future reader would ask why.
+   Put every candidate to the peers the moment step 4 returns — did the
+   design settle this, and does an ADR already carry it — and write with
+   the `software-design:adr` skill before the review cycle runs. A new
+   ADR goes in on the answers you have by then; a supersession waits for
+   its peer, since it edits an ADR someone else wrote. A candidate still
+   waiting when the cycle ends is one you name to me.
 6. **Review the whole.** The loop reviews saw slices; this one sees what
    they add up to. The review cycle is `/code-review` and
    `/security-review` over the full diff, their findings fixed, and both

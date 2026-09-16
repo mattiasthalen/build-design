@@ -35,6 +35,18 @@ const FINDINGS = {
   required: ['findings'],
 }
 
+const DECISIONS = {
+  type: 'object',
+  properties: {
+    decisions: {
+      type: 'array',
+      items: { type: 'string' },
+      description: 'forks this stage took that the behavior did not settle, each with what it rejected',
+    },
+  },
+  required: ['decisions'],
+}
+
 const DEFAULT = {
   red: { model: 'opus', effort: 'high' },
   green: { model: 'sonnet', effort: 'medium' },
@@ -74,10 +86,12 @@ for (const [i, behavior] of args.behaviors.entries()) {
   }
 
   phase('Green')
-  await agent(
+  const green = await agent(
     `Make ${red.testPath} pass. The failure to clear: ${red.failure}\n\n` +
-    `Smallest change that earns it. Leave the test alone. Run the whole suite and report it green.`,
-    { label: `green ${at}`, phase: 'Green', ...tier('green', behavior) })
+    `Smallest change that earns it. Leave the test alone. Run the whole suite and report it green. ` +
+    `Report every fork you took that the behavior did not settle, with what you rejected — a shape the ` +
+    `criterion allowed two of, an invariant you chose to enforce here, a name you had to coin.`,
+    { label: `green ${at}`, phase: 'Green', ...tier('green', behavior), schema: DECISIONS })
 
   phase('Review')
   const findings = (await parallel(LENSES.map((lens) => () =>
@@ -86,13 +100,15 @@ for (const [i, behavior] of args.behaviors.entries()) {
       { label: `review ${at}: ${lens.split(':')[0]}`, phase: 'Review', ...tier('review', behavior), schema: FINDINGS })
   ))).filter(Boolean).flatMap((r) => r.findings)
 
+  let fixes = null
   if (findings.length) {
     phase('Review')
-    await agent(
+    fixes = await agent(
       `Fix these findings in the working tree, keeping every test green:\n` +
       findings.map((f) => `- ${f.file}${f.line ? `:${f.line}` : ''} — ${f.finding}`).join('\n') +
-      `\n\nA finding you judge wrong stays unfixed and comes back with the reason.`,
-      { label: `fix ${at}`, phase: 'Review', ...tier('fix', behavior) })
+      `\n\nA finding you judge wrong stays unfixed and comes back with the reason, which is a fork like ` +
+      `any other. Report every fork the fixes took.`,
+      { label: `fix ${at}`, phase: 'Review', ...tier('fix', behavior), schema: DECISIONS })
   }
 
   phase('Commit')
@@ -100,7 +116,12 @@ for (const [i, behavior] of args.behaviors.entries()) {
     `Commit the working tree. The message names the behavior — ${behavior.criterion} — and says why it is built this way.`,
     { label: `commit ${at}`, phase: 'Commit', ...tier('commit', behavior) })
 
-  built.push({ behavior: behavior.criterion, test: red.testPath, findings: findings.length })
+  built.push({
+    behavior: behavior.criterion,
+    test: red.testPath,
+    findings: findings.length,
+    decisions: [...(green?.decisions ?? []), ...(fixes?.decisions ?? [])],
+  })
 }
 
 return built
