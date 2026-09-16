@@ -55,9 +55,10 @@ I approve it. Step 4 starts on that approval.
    each criterion, what its review fixed, and the forks its loops took.
    Done is every acceptance criterion met by a test in the history.
    Structure the ticket leaves open follows
-   `software-design:design-philosophy`. A design decision the code
-   refuses is a fork the loop reports rather than one it takes quietly,
-   and it comes to me before anything is recorded.
+   `software-design:design-philosophy`, or `design:design-philosophy`
+   where that plugin was installed under its own name. A design decision
+   the code refuses is a fork the loop reports rather than one it takes
+   quietly, and it comes to me before anything is recorded.
 5. **Record the decisions.** A decision made while building, mine and
    the loops' included, is ADR-worthy when a real fork existed, its
    consequences outlive the change, and a future reader would ask why.
@@ -65,7 +66,8 @@ I approve it. Step 4 starts on that approval.
    design settle this, and does an ADR already carry it. `ListAgents`
    first: a peer that answered in step 2 and is no longer listed is one
    you name to me, not one you wait on. Then write with the
-   `software-design:adr` skill before the review cycle runs. A new
+   `software-design:adr` skill — `design:adr` where that plugin was
+   installed under its own name — before the review cycle runs. A new
    ADR goes in on the answers you have by then; a supersession waits for
    its peer, since it edits an ADR someone else wrote. A candidate still
    waiting when the cycle ends is one you name to me.
@@ -74,7 +76,7 @@ I approve it. Step 4 starts on that approval.
    this branch left its base and never the working tree: name that base
    to `/code-review` and `/security-review`, fix what they find, and run
    both again; a pass that finds nothing ends it. The ADRs and these
-   fixes are commits of their own. Then tell me: each
-   criterion and the test that met it, the ADRs written, what the
-   reviews found, and every tier the plan moved off its default, with
-   what in the source or the behavior moved it.
+   fixes are commits of their own. Then tell me: each criterion and the
+   test that met it, the ADRs written, what the reviews found, and every
+   tier the plan moved off its default, with what in the source or the
+   behavior moved it.

@@ -231,3 +231,10 @@ the name the harness lists. This marketplace pulls the plugin in under
 `software-design` because its own name, `design`, is also the name of an
 Anthropic skill, and a pointer that says `design` reaches whichever answers
 first.
+
+Each pointer names the other install too — `design:adr`, `design:design-philosophy`
+— because the rename is this marketplace's and the upstream plugin lists
+under its own name. A Fable review found it on a machine with the upstream
+install, where both pointers resolve to nothing; the miss is silent, and what
+follows it is an ADR in whatever format the model invents. The skill costs a
+clause per pointer and works either way.
