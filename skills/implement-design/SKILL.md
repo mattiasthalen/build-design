@@ -82,4 +82,5 @@ I approve it. Step 4 starts on that approval.
    fixes are commits of their own. Then tell me: each criterion and the
    test that met it, the ADRs written, what the reviews found, and every
    tier the plan moved off its default, with what in the source or the
-   behavior moved it.
+   behavior moved it. That report ends the run: one ticket, and the next
+   one is a new session.
