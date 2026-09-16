@@ -59,8 +59,10 @@ I approve it. Step 4 starts on that approval.
    the loops' included, is ADR-worthy when a real fork existed, its
    consequences outlive the change, and a future reader would ask why.
    Put every candidate to the peers the moment step 4 returns — did the
-   design settle this, and does an ADR already carry it — and write with
-   the `software-design:adr` skill before the review cycle runs. A new
+   design settle this, and does an ADR already carry it. `ListAgents`
+   first: a peer that answered in step 2 and is no longer listed is one
+   you name to me, not one you wait on. Then write with the
+   `software-design:adr` skill before the review cycle runs. A new
    ADR goes in on the answers you have by then; a supersession waits for
    its peer, since it edits an ADR someone else wrote. A candidate still
    waiting when the cycle ends is one you name to me.
