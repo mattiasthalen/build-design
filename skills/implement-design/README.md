@@ -35,7 +35,9 @@ Most rows pair a line with its source rather than with an incident. Two
 groups are earned: the loop in step 4, from a run that batched the tests,
 and the six fixes a Fable review of the unrun skill found — the peer wait,
 the refused-decision channel, step 6's review target, the uncommitted ADRs,
-`unread` by position, and the green and commit gates. A line that a run breaks
+`unread` by position, and the green and commit gates; and three from the first
+smoke run of `build-behaviors` against a real repository, where the commit
+gate stopped the run and the lenses reviewed the whole file. A line that a run breaks
 without gets its row rewritten to say what went wrong; a line no run ever
 needed gets cut.
 
@@ -154,6 +156,9 @@ Its default tiers, which a behavior or `args.models` overrides:
 | `unread` from position, not from the returned `source` | a Fable review predicted it and the probe run had already done it: an agent told to read "the skill at skills/implement-design/SKILL.md" returns `source: '/home/user/build-design/skills/implement-design/SKILL.md'`. The name in `args` is what I called the thing; the string in the slice is what the agent called it, and they match by luck. `parallel` preserves input order, so position is the identity and the echoed name is only a label. Missed on the first read of that run, which reported two read sources as unread and had the synthesis invent a list |
 | the green and commit gates | the same review: `green` returned only its decisions and `commit` returned nothing, so a suite that never went green went on to be reviewed and committed red, and a commit a hook refused left its slice loose in the tree for the next loop to swallow. Both stages report now, and both stop the run — "one loop, one commit" is checked rather than asserted |
 | `git add -A` in green, `git diff --cached` in the lenses | the lenses read "the uncommitted diff", and `git diff` does not show an untracked file. The new test is untracked by construction, so the three reviewers saw the change and not the contract it was written against — the correctness lens reading a diff with its test missing |
+| `notes` in green and fix, not only in red | the smoke run: only the red prompt carried `behavior.notes`, so what step 3 settled about a behavior reached the test and never reached the code that has to satisfy it. Green got there anyway because `red.testPath` came back absolute, which is luck, not design |
+| `cd there first` in the commit prompt | the same run, and the gate that caught it. The commit agent had no anchor — not the notes, not a path — so it ran `git status` wherever it started, found that repository clean, and returned "no staged changes". The slice was staged the whole time, in the repository the other stages had found by way of the test's absolute path |
+| the lenses review the slice, not the file | the same run: three lenses handed a four-line diff reported on `addLine`, which the slice never touched, and the fix stage went and hardened it — `Object.freeze`, sku and quantity validation, a test rewritten — none of it "an empty basket cannot be checked out". One loop, one behavior only holds if the review is scoped to the behavior too, so the lens reads the added lines and a finding about code the slice did not touch comes back as a fork rather than a fix |
 | stopping when the test never goes red | a test that passes on its first run says the behavior already exists or the test misses it, and either way the rest of the loops are built on a check that proves nothing. The reference's no-silent-caps rule makes the stop a `log` line naming how many behaviors went unbuilt |
 | `A finding you judge wrong stays unfixed and comes back with the reason` | the same rule step 4 has for a design decision the code refuses, at the scale of one loop: the fix stage is the reviewer's peer, not its clerk |
 
