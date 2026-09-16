@@ -44,8 +44,10 @@ args = {
 runs red → green → three review lenses → fix → commit, and commits to the
 branch's own working tree.
 
-Returns one row per behavior: `{behavior, test, findings, decisions}`.
+Returns one row per behavior: `{behavior, test, findings, commit, decisions}`.
 `decisions` is what the green and fix stages had to settle that the criterion
 did not — the material step 5 puts to the peers and weighs for an ADR. A run
-that stops because a test never went red says so in its log and leaves the
-rest unbuilt — that is a finding for step 6, not a failure to retry.
+that stops says so in its log and leaves the rest unbuilt: a test that never
+went red, a test that never went green, or a commit something refused. Each is
+a finding to bring me, and the run resumes as a fresh call carrying the
+behaviors that never got built.

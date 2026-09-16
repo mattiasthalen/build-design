@@ -38,8 +38,10 @@ I approve it. Step 4 starts on that approval.
    and say what makes each look that way, and ask which to ask. Send
    each of those your reading, and ask what the design decided that the
    ticket does not carry and what it rejected. Read every answer before
-   you ask me anything else. A peer I name that nothing answers to is a
-   gap you tell me about.
+   you ask me anything else. A peer that has not answered by the time
+   the questions are ready goes into them as an outstanding wait, not as
+   a wait you hold; a peer I name that nothing answers to is a gap you
+   tell me about.
 3. **Ask me the clarifying questions**, in one message: every decision
    still yours after the ticket, the docs and the peers. Names are up
    for debate — one that does not say what the thing is comes back with
@@ -53,8 +55,9 @@ I approve it. Step 4 starts on that approval.
    each criterion, what its review fixed, and the forks its loops took.
    Done is every acceptance criterion met by a test in the history.
    Structure the ticket leaves open follows
-   `software-design:design-philosophy`. A design decision
-   the code refuses comes back to me first.
+   `software-design:design-philosophy`. A design decision the code
+   refuses is a fork the loop reports rather than one it takes quietly,
+   and it comes to me before anything is recorded.
 5. **Record the decisions.** A decision made while building, mine and
    the loops' included, is ADR-worthy when a real fork existed, its
    consequences outlive the change, and a future reader would ask why.
@@ -67,9 +70,11 @@ I approve it. Step 4 starts on that approval.
    its peer, since it edits an ADR someone else wrote. A candidate still
    waiting when the cycle ends is one you name to me.
 6. **Review the whole.** The loop reviews saw slices; this one sees what
-   they add up to. The review cycle is `/code-review` and
-   `/security-review` over the full diff, their findings fixed, and both
-   run again; a pass that finds nothing ends it. Then tell me: each
+   they add up to. The loops committed, so the change is the diff since
+   this branch left its base and never the working tree: name that base
+   to `/code-review` and `/security-review`, fix what they find, and run
+   both again; a pass that finds nothing ends it. The ADRs and these
+   fixes are commits of their own. Then tell me: each
    criterion and the test that met it, the ADRs written, what the
    reviews found, and every tier the plan moved off its default, with
    what in the source or the behavior moved it.

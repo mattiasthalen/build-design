@@ -35,6 +35,20 @@ const FINDINGS = {
   required: ['findings'],
 }
 
+const GREEN = {
+  type: 'object',
+  properties: {
+    green: { type: 'boolean', description: 'the whole suite passes' },
+    failure: { type: 'string', description: 'what still fails, when it does not' },
+    decisions: {
+      type: 'array',
+      items: { type: 'string' },
+      description: 'forks this stage took that the behavior did not settle, each with what it rejected',
+    },
+  },
+  required: ['green', 'failure', 'decisions'],
+}
+
 const DECISIONS = {
   type: 'object',
   properties: {
@@ -45,6 +59,15 @@ const DECISIONS = {
     },
   },
   required: ['decisions'],
+}
+
+const COMMIT = {
+  type: 'object',
+  properties: {
+    sha: { type: 'string', description: "the commit's sha, empty when nothing was committed" },
+    refused: { type: 'string', description: 'what refused it — a hook, an empty index, an unset identity' },
+  },
+  required: ['sha', 'refused'],
 }
 
 const DEFAULT = {
@@ -88,15 +111,22 @@ for (const [i, behavior] of args.behaviors.entries()) {
   phase('Green')
   const green = await agent(
     `Make ${red.testPath} pass. The failure to clear: ${red.failure}\n\n` +
-    `Smallest change that earns it. Leave the test alone. Run the whole suite and report it green. ` +
+    `Smallest change that earns it. Leave the test alone. Run the whole suite and report whether it is green. ` +
+    `Stage the slice when it is — \`git add -A\` — so the review reads the new test with the change. ` +
     `Report every fork you took that the behavior did not settle, with what you rejected — a shape the ` +
     `criterion allowed two of, an invariant you chose to enforce here, a name you had to coin.`,
-    { label: `green ${at}`, phase: 'Green', ...tier('green', behavior), schema: DECISIONS })
+    { label: `green ${at}`, phase: 'Green', ...tier('green', behavior), schema: GREEN })
+
+  if (!green?.green) {
+    log(`${at} stopped: ${red.testPath} never went green (${green?.failure ?? 'no result'}). ${args.behaviors.length - i} behaviors unbuilt.`)
+    break
+  }
 
   phase('Review')
   const findings = (await parallel(LENSES.map((lens) => () =>
     agent(
-      `Review the uncommitted diff through one lens — ${lens}. Report only what this lens sees, in the diff itself.`,
+      `Review this slice — \`git diff --cached\`, the new test ${red.testPath} and the change that passes it — ` +
+      `through one lens: ${lens}. Report only what this lens sees, in the slice itself.`,
       { label: `review ${at}: ${lens.split(':')[0]}`, phase: 'Review', ...tier('review', behavior), schema: FINDINGS })
   ))).filter(Boolean).flatMap((r) => r.findings)
 
@@ -104,7 +134,7 @@ for (const [i, behavior] of args.behaviors.entries()) {
   if (findings.length) {
     phase('Review')
     fixes = await agent(
-      `Fix these findings in the working tree, keeping every test green:\n` +
+      `Fix these findings in the slice, keeping every test green, and stage what you change:\n` +
       findings.map((f) => `- ${f.file}${f.line ? `:${f.line}` : ''} — ${f.finding}`).join('\n') +
       `\n\nA finding you judge wrong stays unfixed and comes back with the reason, which is a fork like ` +
       `any other. Report every fork the fixes took.`,
@@ -112,14 +142,21 @@ for (const [i, behavior] of args.behaviors.entries()) {
   }
 
   phase('Commit')
-  await agent(
-    `Commit the working tree. The message names the behavior — ${behavior.criterion} — and says why it is built this way.`,
-    { label: `commit ${at}`, phase: 'Commit', ...tier('commit', behavior) })
+  const commit = await agent(
+    `Commit the staged slice. The message names the behavior — ${behavior.criterion} — and says why it is built ` +
+    `this way. Return the commit's sha, or say what refused it.`,
+    { label: `commit ${at}`, phase: 'Commit', ...tier('commit', behavior), schema: COMMIT })
+
+  if (!commit?.sha) {
+    log(`${at} stopped: nothing committed (${commit?.refused ?? 'no result'}). Its slice is loose in the tree and the next loop would swallow it.`)
+    break
+  }
 
   built.push({
     behavior: behavior.criterion,
     test: red.testPath,
     findings: findings.length,
+    commit: commit.sha,
     decisions: [...(green?.decisions ?? []), ...(fixes?.decisions ?? [])],
   })
 }

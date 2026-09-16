@@ -72,7 +72,7 @@ const LENSES = [
 ]
 
 phase('Read')
-const slices = (await parallel(args.sources.map((s) => () =>
+const read = await parallel(args.sources.map((s) => () =>
   agent(
     `Read ${s.name} at ${s.where}. The ticket it serves:\n\n${args.ticket}\n\n` +
     (s.kind === 'code'
@@ -81,9 +81,12 @@ const slices = (await parallel(args.sources.map((s) => () =>
       : `Report what it says that bears on this ticket, every decision it records with what that decision rejected, ` +
         `and what it leaves open.`),
     { label: `read ${s.name}`, phase: 'Read', ...tier(s.kind, s), schema: SLICE })
-))).filter(Boolean)
+))
 
-const unread = args.sources.filter((s) => !slices.some((r) => r.source === s.name)).map((s) => s.name)
+// parallel keeps the input order, so position is the identity — an agent's own
+// `source` string is whatever it chose to call the thing and never matches
+const slices = read.filter(Boolean)
+const unread = args.sources.filter((s, i) => !read[i]).map((s) => s.name)
 if (unread.length) log(`unread: ${unread.join(', ')} — the reading is short by ${unread.length} of ${args.sources.length} sources`)
 
 phase('Synthesize')
