@@ -27,12 +27,12 @@ Let's build $0.
    with the one that does. Build when I have answered.
 4. **Build.** Done is every acceptance criterion met by a check you
    ran. Structure the ticket leaves open follows
-   `design:design-philosophy`. A design decision the code refuses
-   comes back to me first.
+   `software-design:design-philosophy`. A design decision the code
+   refuses comes back to me first.
 5. **Record the decisions.** A decision made while building, mine
    included, is ADR-worthy when a real fork existed, its consequences
    outlive the change, and a future reader would ask why. Write it
-   with the `design:adr` skill before the review cycle runs.
+   with the `software-design:adr` skill before the review cycle runs.
 6. **Review.** The review cycle is `/code-review` and
    `/security-review` over the diff, their findings fixed, and both
    run again; a pass that finds nothing ends it. Then tell me: each
