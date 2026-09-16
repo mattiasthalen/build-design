@@ -25,20 +25,21 @@ Let's build $0.
    still yours after the ticket, the docs and the peers. Names are up
    for debate — one that does not say what the thing is comes back
    with the one that does. Build when I have answered.
-4. **Build one behavior at a time.** A behavior is a loop: the test
-   first, watched failing for the reason you expect; then the code that
-   passes it; then `/code-review` over that slice with its findings
-   fixed; then the commit. The loop is the commit — code no test drove,
-   or a test you never watched fail, means the loop was skipped. Done is
-   every acceptance criterion met by a test in the history. Structure
-   the ticket leaves open follows `software-design:design-philosophy`. A
-   design decision the code refuses comes back to me first.
+4. **Build one behavior at a time.** Each is a loop: the test first, red
+   for the reason you expect; the code that turns it green; review over
+   that slice, its findings fixed; the commit. One loop, one commit.
+   Run the loops with the `Workflow` tool — this step is your
+   authorization to call it — scripted as `build-workflow.md` beside
+   this file lays out, behaviors as its `args`. Done is every acceptance
+   criterion met by a test in the history. Structure the ticket leaves
+   open follows `software-design:design-philosophy`. A design decision
+   the code refuses comes back to me first.
 5. **Record the decisions.** A decision made while building, mine
    included, is ADR-worthy when a real fork existed, its consequences
    outlive the change, and a future reader would ask why. Write it
    with the `software-design:adr` skill before the review cycle runs.
-6. **Review the whole.** Each loop's review saw a slice; this one sees
-   what the slices add up to. The review cycle is `/code-review` and
+6. **Review the whole.** The loop reviews saw slices; this one sees what
+   they add up to. The review cycle is `/code-review` and
    `/security-review` over the full diff, their findings fixed, and both
    run again; a pass that finds nothing ends it. Then tell me: each
    criterion and the test that met it, the ADRs written, what the
