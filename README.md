@@ -1,3 +1,5 @@
+> **Archived.** Superseded by [mattiasthalen/claude-plugins](https://github.com/mattiasthalen/claude-plugins). Nothing here migrates.
+
 # build-design
 
 Build what a design interview decided. The design comes from Tobias
